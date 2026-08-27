@@ -14,7 +14,7 @@ const NEXT_STEP =
 
 describe("starter page", () => {
   it("marks the intro region used by the starter script", async () => {
-    const distPath = resolve("frienddotcom/dist/index.html");
+    const distPath = resolve("size-up-life/dist/index.html");
     expect(
       existsSync(distPath),
       `${distPath} not found — you've restructured away from it. ${NEXT_STEP}`,
