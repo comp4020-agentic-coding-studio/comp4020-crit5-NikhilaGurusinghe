@@ -31,7 +31,7 @@ export default function ResizableP5Sketch({
   const isDisplayable = width !== undefined && height !== undefined;
 
   return (
-    <div ref={ref} className="h-[60vh] aspect-auto">
+    <div ref={ref} className="w-[600px] flex-none h-auto aspect-video">
       {isDisplayable && (
         <NextReactP5Wrapper
           sketch={sketch}
