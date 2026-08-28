@@ -7,14 +7,13 @@ import GameMode from "./utils/game-mode";
 
 export default function MainGamePage() {
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
-  const [streak, setStreak] = useState<number>(0);
+  const [guesses, setGuesses] = useState<number[]>([]);
 
   return (
     <>
       <Navbar
-        streak={streak}
+        guesses={guesses}
         gameMode={gameMode}
-        setStreak={setStreak}
         setGameMode={setGameMode}
       />
       <GameContent />
