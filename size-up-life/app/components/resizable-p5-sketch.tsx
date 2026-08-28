@@ -13,6 +13,7 @@ interface ResizableP5Props<Props extends SketchProps = SketchProps> {
   sketchProps?: Props;
   sketchHeightPx: number;
   sketchAspectRatio: string;
+  sketchAltText: string;
 }
 
 export default function ResizableP5Sketch({
@@ -20,6 +21,7 @@ export default function ResizableP5Sketch({
   sketchProps,
   sketchHeightPx,
   sketchAspectRatio,
+  sketchAltText,
 }: ResizableP5Props) {
   // used initially to set the p5 canvas size
   // used for when the size of the parent div changes (and the p5 canvas size needs to the change)
@@ -42,6 +44,7 @@ export default function ResizableP5Sketch({
         aspectRatio: `${sketchAspectRatio}`,
         height: `${sketchHeightPx}px`,
       }}
+      aria-label={sketchAltText}
     >
       {isDisplayable && (
         <NextReactP5Wrapper

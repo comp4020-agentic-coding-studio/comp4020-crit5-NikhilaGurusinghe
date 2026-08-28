@@ -8,12 +8,14 @@ import ResizableP5Sketch, {
 
 type AnimalGraphicProps = {
   imagePath: string;
+  imageAltText: string;
   sketchHeightPx: number;
   sketchAspectRatio: string;
 };
 
 export default function AnimalGraphic({
   imagePath,
+  imageAltText,
   sketchHeightPx,
   sketchAspectRatio,
 }: AnimalGraphicProps) {
@@ -96,7 +98,10 @@ export default function AnimalGraphic({
           p5.circle(
             p5.map(x, 0, animalImageP5.width, 0, p5.width + 10),
             p5.map(y, 0, animalImageP5.height, 0, p5.height + 10),
-            (diameter * p5.lerp(1, 0.4, x/animalImageP5.width) * p5.lerp(0.4, 1, y/animalImageP5.height)) * halfToneDiameterScale,
+            diameter *
+              p5.lerp(1, 0.4, x / animalImageP5.width) *
+              p5.lerp(0.4, 1, y / animalImageP5.height) *
+              halfToneDiameterScale,
           );
         }
       }
@@ -106,6 +111,7 @@ export default function AnimalGraphic({
   return (
     <ResizableP5Sketch
       sketch={sketch}
+      sketchAltText={imageAltText}
       sketchHeightPx={sketchHeightPx}
       sketchAspectRatio={sketchAspectRatio}
     />
