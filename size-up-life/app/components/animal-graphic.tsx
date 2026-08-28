@@ -35,11 +35,8 @@ export default function AnimalGraphic({ imagePath }: AnimalGraphicProps) {
 
     p5.draw = () => {
       p5.background(125);
-      p5.fill(0, 125, 50);
-      p5.circle(p5.width / 2, p5.height / 2, p5.width / 4);
       if (animalImage !== undefined) {
-        console.log(animalImage);
-        p5.image(animalImage, p5.width / 2, p5.height / 2);
+        p5.image(animalImage, p5.width / 2 - ((animalImage as p5Types.Image).width / 2), p5.height / 2 - ((animalImage as p5Types.Image).height / 2));
       }
     };
   };
