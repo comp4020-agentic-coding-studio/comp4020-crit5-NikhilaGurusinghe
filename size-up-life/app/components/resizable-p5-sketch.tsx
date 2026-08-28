@@ -18,8 +18,8 @@ interface ResizableP5Props<Props extends SketchProps = SketchProps> {
 export default function ResizableP5Sketch({
   sketch,
   sketchProps,
-  sketchHeightPx, 
-  sketchAspectRatio
+  sketchHeightPx,
+  sketchAspectRatio,
 }: ResizableP5Props) {
   // used initially to set the p5 canvas size
   // used for when the size of the parent div changes (and the p5 canvas size needs to the change)
@@ -35,7 +35,14 @@ export default function ResizableP5Sketch({
   const isDisplayable = width !== undefined && height !== undefined;
 
   return (
-    <div ref={ref} className="flex-none w-auto" style={{ aspectRatio: `${sketchAspectRatio}`, height: `${sketchHeightPx}px` }}>
+    <div
+      ref={ref}
+      className="flex-none w-auto"
+      style={{
+        aspectRatio: `${sketchAspectRatio}`,
+        height: `${sketchHeightPx}px`,
+      }}
+    >
       {isDisplayable && (
         <NextReactP5Wrapper
           sketch={sketch}

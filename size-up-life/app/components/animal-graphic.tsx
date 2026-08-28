@@ -6,17 +6,21 @@ import ResizableP5Sketch, {
   type ResizableSketchProps,
 } from "./resizable-p5-sketch";
 
-type AnimalGraphicProps = { 
+type AnimalGraphicProps = {
   imagePath: string;
   sketchHeightPx: number;
   sketchAspectRatio: string;
 };
 
-export default function AnimalGraphic({ imagePath, sketchHeightPx, sketchAspectRatio }: AnimalGraphicProps) {
+export default function AnimalGraphic({
+  imagePath,
+  sketchHeightPx,
+  sketchAspectRatio,
+}: AnimalGraphicProps) {
   const sketch: Sketch<ResizableSketchProps> = (p5) => {
     // constants
     const maxHeightPx: number = 1000;
-    const maxLerpDiameter: number = 4.2;
+    const maxLerpDiameter: number = 6;
 
     // used for initialising the canvas size in p5.start see p5.updateWithProps for more info
     let newCanvasWidth: number = 50;
@@ -43,7 +47,11 @@ export default function AnimalGraphic({ imagePath, sketchHeightPx, sketchAspectR
       newCanvasWidth = props.parentWidth;
       newCanvasHeight = props.parentHeight;
 
-      halfToneDiameterScale = p5.lerp(0, maxLerpDiameter, newCanvasHeight/maxHeightPx);
+      halfToneDiameterScale = p5.lerp(
+        1,
+        maxLerpDiameter,
+        newCanvasHeight / maxHeightPx,
+      );
 
       p5.resizeCanvas(newCanvasWidth, newCanvasHeight);
     };
@@ -53,12 +61,16 @@ export default function AnimalGraphic({ imagePath, sketchHeightPx, sketchAspectR
 
       const animalImageP5: p5Types.Image = animalImage as p5Types.Image;
 
-      const stepSize = 5;
+      const sampleResolution = 5;
 
       // halftoning - https://editor.p5js.org/chrsgrbr/sketches/mLNDLCYys
       animalImageP5.loadPixels();
-      for (let x: number = 0; x < animalImageP5.width; x += stepSize) {
-        for (let y: number = 0; y < animalImageP5.height; y += stepSize) {
+      for (let x: number = 0; x < animalImageP5.width; x += sampleResolution) {
+        for (
+          let y: number = 0;
+          y < animalImageP5.height;
+          y += sampleResolution
+        ) {
           const i: number = (y * animalImageP5.width + x) * 4;
 
           const r: number = animalImageP5.pixels[i];
@@ -66,27 +78,36 @@ export default function AnimalGraphic({ imagePath, sketchHeightPx, sketchAspectR
           const b: number = animalImageP5.pixels[i + 2];
           const a: number = animalImageP5.pixels[i + 3];
 
-          if (r > 200 && g > 200 && b > 200) {
+          // transparency
+          if (a === 0) {
             continue;
           }
 
-          const luma: number =  0.299 * r + 0.587 * g + 0.114 * b;
+          if (r > 220 && g > 220 && b > 220) {
+            continue;
+          }
 
-          const diameter: number = p5.map(luma, 0, 255, 0, stepSize);
+          const luma: number = 0.299 * r + 0.587 * g + 0.114 * b;
+
+          const diameter: number = p5.map(luma, 0, 255, 0, sampleResolution);
 
           p5.fill(0);
           p5.noStroke();
-          p5.circle(p5.map(x, 0, animalImageP5.width, 0, p5.width + 10), p5.map(y, 0, animalImageP5.height, 0, p5.height + 10), diameter * halfToneDiameterScale);
-
+          p5.circle(
+            p5.map(x, 0, animalImageP5.width, 0, p5.width + 10),
+            p5.map(y, 0, animalImageP5.height, 0, p5.height + 10),
+            (diameter * p5.lerp(1, 0.4, x/animalImageP5.width) * p5.lerp(0.4, 1, y/animalImageP5.height)) * halfToneDiameterScale,
+          );
         }
       }
-
-
-      // if (animalImage !== undefined) {
-      //   p5.image(animalImageP5, p5.width / 2, p5.height / 2, p5.width, p5.height);
-      // }
     };
   };
 
-  return <ResizableP5Sketch sketch={sketch} sketchHeightPx={sketchHeightPx} sketchAspectRatio={sketchAspectRatio} />;
+  return (
+    <ResizableP5Sketch
+      sketch={sketch}
+      sketchHeightPx={sketchHeightPx}
+      sketchAspectRatio={sketchAspectRatio}
+    />
+  );
 }
