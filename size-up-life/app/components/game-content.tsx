@@ -3,7 +3,7 @@ import AnimalGraphic from "./animal-graphic";
 
 export default function GameContent() {
   return (
-    <main className="flex flex-row flex-1 h-full w-full items-end gap-2 overflow-x-scroll">
+    <main className="flex flex-row flex-1 h-full w-full items-end gap-2 overflow-x-scroll pb-7">
       <AnimalGraphic
         imagePath={`${basePath}/images/blue-whale.png`}
         imageAltText="image of a blue whale"

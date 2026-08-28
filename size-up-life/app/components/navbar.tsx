@@ -18,7 +18,7 @@ export default function Navbar({
 
   return (
     <header>
-      <nav className="flex flex-row items-center justify-between px-8 pt-9 md:px-9 md:pt-10">
+      <nav className="flex flex-row items-center justify-between px-7 pt-9 md:px-9 md:pt-10">
         <h1 className="sr-only">{gameMode} Mode</h1>
         <p className="text-6xl font-bold">
           {guesses.length}
@@ -75,7 +75,7 @@ export default function Navbar({
           <li>
             <button className="cursor-pointer" type="button">
               <Image
-                className="h-9.5 md:h-10 w-auto aspect-square"
+                className="h-10.5 md:h-11 w-auto aspect-square"
                 src={`${basePath}/icons/refresh-thick.png`}
                 width={512}
                 height={512}
