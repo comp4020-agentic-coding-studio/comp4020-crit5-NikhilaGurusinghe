@@ -39,7 +39,7 @@ export default function ResizableP5Sketch({
   return (
     <div
       ref={ref}
-      className="flex-none w-auto"
+      className="flex-none w-auto self-center"
       style={{
         aspectRatio: `${sketchAspectRatio}`,
         height: `${sketchHeightPx}px`,

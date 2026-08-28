@@ -11,6 +11,7 @@ type AnimalGraphicProps = {
   imageAltText: string;
   sketchHeightPx: number;
   sketchAspectRatio: string;
+  animalName: string;
 };
 
 export default function AnimalGraphic({
@@ -18,6 +19,7 @@ export default function AnimalGraphic({
   imageAltText,
   sketchHeightPx,
   sketchAspectRatio,
+  animalName
 }: AnimalGraphicProps) {
   const sketch: Sketch<ResizableSketchProps> = (p5) => {
     // constants
@@ -109,11 +111,14 @@ export default function AnimalGraphic({
   };
 
   return (
-    <ResizableP5Sketch
-      sketch={sketch}
-      sketchAltText={imageAltText}
-      sketchHeightPx={sketchHeightPx}
-      sketchAspectRatio={sketchAspectRatio}
-    />
+    <div className="flex flex-col gap-y-4">
+      <ResizableP5Sketch
+        sketch={sketch}
+        sketchAltText={imageAltText}
+        sketchHeightPx={sketchHeightPx}
+        sketchAspectRatio={sketchAspectRatio}
+      />
+      <p className="self-start">{animalName}</p>
+    </div>
   );
 }
