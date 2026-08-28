@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { basePath } from "@/lib/base-path";
 import AnimalGraphic from "./components/animal-graphic";
 
