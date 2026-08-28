@@ -6,9 +6,13 @@ import ResizableP5Sketch, {
   type ResizableSketchProps,
 } from "./resizable-p5-sketch";
 
-type AnimalGraphicProps = { imagePath: string };
+type AnimalGraphicProps = { 
+  imagePath: string;
+  sketchHeightPx: number;
+  sketchAspectRatio: string;
+};
 
-export default function AnimalGraphic({ imagePath }: AnimalGraphicProps) {
+export default function AnimalGraphic({ imagePath, sketchHeightPx, sketchAspectRatio }: AnimalGraphicProps) {
   const sketch: Sketch<ResizableSketchProps> = (p5) => {
     // used for initialising the canvas size in p5.start see p5.updateWithProps for more info
     let newCanvasWidth: number = 50;
@@ -19,6 +23,7 @@ export default function AnimalGraphic({ imagePath }: AnimalGraphicProps) {
     p5.setup = async () => {
       p5.createCanvas(newCanvasWidth, newCanvasHeight);
       animalImage = await p5.loadImage(imagePath);
+      p5.imageMode(p5.CENTER);
     };
 
     p5.updateWithProps = (props) => {
@@ -34,12 +39,11 @@ export default function AnimalGraphic({ imagePath }: AnimalGraphicProps) {
     };
 
     p5.draw = () => {
-      p5.background(125);
       if (animalImage !== undefined) {
-        p5.image(animalImage, p5.width / 2 - ((animalImage as p5Types.Image).width / 2), p5.height / 2 - ((animalImage as p5Types.Image).height / 2));
+        p5.image(animalImage, p5.width / 2, p5.height / 2, p5.width, p5.height);
       }
     };
   };
 
-  return <ResizableP5Sketch sketch={sketch} />;
+  return <ResizableP5Sketch sketch={sketch} sketchHeightPx={sketchHeightPx} sketchAspectRatio={sketchAspectRatio} />;
 }
