@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
 
   images: { unoptimized: true },
 
+  // cause of react strict mode the p5 stuff i have renders twice
+  // (im assuming cuz it uses a useEffect to do the p5 stuff and useEffect's are
+  // triggered twice in strict mode) so uncomment this if you don't want to deal with
+  // that but also its really dumb that next just makes this a global toggle cause
+  // react can enable strictmode on a component-by-component basis
+  // but this is the best i got -_-
   reactStrictMode: false,
 };
 

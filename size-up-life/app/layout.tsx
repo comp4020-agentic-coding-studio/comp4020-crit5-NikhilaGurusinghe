@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Size Up Life",
-  description: "Ever wanted to know how big a t-rex is compared to a blue whale, now you can in this fun engaging daily game!",
+  description:
+    "Ever wanted to know how big a t-rex is compared to a blue whale, now you can in this fun engaging daily game!",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
