@@ -45,6 +45,7 @@ export default function ResizableP5Sketch({
         height: `${sketchHeightPx}px`,
       }}
       aria-label={sketchAltText}
+      role="img"
     >
       {isDisplayable && (
         <NextReactP5Wrapper
