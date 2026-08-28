@@ -11,11 +11,7 @@ export default function MainGamePage() {
 
   return (
     <>
-      <Navbar
-        guesses={guesses}
-        gameMode={gameMode}
-        setGameMode={setGameMode}
-      />
+      <Navbar guesses={guesses} gameMode={gameMode} setGameMode={setGameMode} />
       <GameContent />
     </>
   );
