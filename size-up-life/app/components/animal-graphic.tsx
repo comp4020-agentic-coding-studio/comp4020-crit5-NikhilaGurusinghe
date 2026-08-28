@@ -19,7 +19,7 @@ export default function AnimalGraphic({
   imageAltText,
   sketchHeightPx,
   sketchAspectRatio,
-  animalName
+  animalName,
 }: AnimalGraphicProps) {
   const sketch: Sketch<ResizableSketchProps> = (p5) => {
     // constants
@@ -111,14 +111,25 @@ export default function AnimalGraphic({
   };
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <ResizableP5Sketch
-        sketch={sketch}
-        sketchAltText={imageAltText}
-        sketchHeightPx={sketchHeightPx}
-        sketchAspectRatio={sketchAspectRatio}
+    <div className="flex flex-row">
+      <input
+        className="[writing-mode:vertical-lr] [direction: ltr] [appearance: slider-vertical]"
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        defaultValue="0.5"
+        orient="vertical"
       />
-      <p className="self-start">{animalName}</p>
+      <div className="flex flex-col gap-y-4">
+        <ResizableP5Sketch
+          sketch={sketch}
+          sketchAltText={imageAltText}
+          sketchHeightPx={sketchHeightPx}
+          sketchAspectRatio={sketchAspectRatio}
+        />
+        <label className="self-start text-lg">{animalName}</label>
+      </div>
     </div>
   );
 }
