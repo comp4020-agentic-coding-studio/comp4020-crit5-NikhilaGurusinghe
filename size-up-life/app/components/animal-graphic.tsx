@@ -111,19 +111,8 @@ export default function AnimalGraphic({
   };
 
   return (
-    <div className="flex flex-row">
-      {/* <input
-        className="[writing-mode:vertical-lr] [direction: ltr] [appearance: slider-vertical] h-20 self-end mb-10"
-        type="range"
-        min="0"
-        max="1"
-        step="0.01"
-        defaultValue="0.5"
-        orient="vertical"
-        style={{ direction: "rtl" }}
-      /> */}
-      <figure className="flex flex-col gap-y-4">
-        <div className="inline-grid grid-cols-[auto_max-content] grid-rows-[auto_max-content] align-middle items-center">
+    <figure className="flex flex-col">
+        <div className="inline-grid grid-cols-[auto_max-content] grid-rows-[auto_max-content]">
           {/* vertical measure i.e. height */}
           <div className="col-start-1 row-start-2 h-full flex flex-row items-center justify-center">
             <span className="mr-px md:mr-0.5 [writing-mode:vertical-lr] -scale-y-100 -scale-x-100" style={{ textOrientation: "sideways", }}>{sketchHeightPx}m</span>
@@ -132,7 +121,7 @@ export default function AnimalGraphic({
 
           {/* horizontal measure i.e. width */}
           <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
-            <span className="mb-px md:mb-0.5">{sketchHeightPx}m</span>
+            <span className="mb-[1.5px] md:mb-0.5">{sketchHeightPx}m</span>
             <div className="relative border-t-3 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.75 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.75 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
           </div>
           
@@ -145,8 +134,8 @@ export default function AnimalGraphic({
             />
           </div>
         </div>
-        <figcaption className="self-start text-lg ml-6">{animalName}</figcaption>
-      </figure>
-    </div>
+
+        <figcaption className="text-2xl contain-inline-size truncate ml-6 mt-4 md:mt-8" title={animalName}>{animalName}</figcaption>
+    </figure>
   );
 }

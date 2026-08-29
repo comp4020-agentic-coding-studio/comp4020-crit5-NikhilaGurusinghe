@@ -29,7 +29,7 @@ export default function Navbar({
           <li>
             <div className="relative">
               <button
-                className="relative cursor-pointer hover:scale-110 transition-all"
+                className="relative cursor-pointer hover:scale-110 transition-all active:scale-90"
                 type="button"
                 onClick={
                   gameMode === GameMode.DAILY
@@ -74,7 +74,7 @@ export default function Navbar({
           </li>
           <li>
             <button
-              className="cursor-pointer hover:scale-110 transition-all"
+              className="cursor-pointer hover:scale-110 transition-all active:scale-90"
               type="button"
             >
               <Image
