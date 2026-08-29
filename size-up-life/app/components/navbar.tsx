@@ -1,18 +1,17 @@
 import Image from "next/image";
-import type { Dispatch, SetStateAction } from "react";
 import { basePath } from "@/lib/base-path";
 import GameMode from "./utils/game-mode";
 
 type NavbarProps = {
   activeGuessIndex: number;
   gameMode: GameMode;
-  setGameMode: Dispatch<SetStateAction<GameMode>>;
+  changeGameMode: () => void;
 };
 
 export default function Navbar({
   activeGuessIndex,
   gameMode,
-  setGameMode,
+  changeGameMode,
 }: NavbarProps) {
   const dayOfMonth: number = new Date().getDate();
 
@@ -31,11 +30,7 @@ export default function Navbar({
             <button
               className="relative cursor-pointer hover:scale-110 transition-all active:scale-90"
               type="button"
-              onClick={
-                gameMode === GameMode.DAILY
-                  ? () => setGameMode(GameMode.INFINITE)
-                  : () => setGameMode(GameMode.DAILY)
-              }
+              onClick={changeGameMode}
             >
               {gameMode === GameMode.INFINITE && (
                 <>

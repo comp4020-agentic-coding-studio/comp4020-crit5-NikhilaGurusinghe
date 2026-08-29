@@ -23,6 +23,12 @@ export default function AnimalGraphic({
   animalName,
   isGuessing,
 }: AnimalGraphicProps) {
+  function getWidth(aspectRatio: string, height: number): number {
+    const [numerator, denominator] = aspectRatio.split(" / ").map(Number);
+
+    return Math.round(height * (numerator / denominator));
+  }
+ 
   const sketch: Sketch<ResizableSketchProps> = (p5) => {
     // constants
     const maxHeightPx: number = 1000;
@@ -146,14 +152,14 @@ export default function AnimalGraphic({
             className="mr-px md:mr-0.5 [writing-mode:vertical-lr] -scale-y-100 -scale-x-100"
             style={{ textOrientation: "sideways" }}
           >
-            {sketchHeightPx}m
+            {sketchHeightPx} m
           </span>
           <div className="relative border-l-2 pl-3 h-full rounded-xs before:absolute before:top-0 before:left-0 before:h-0.5 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
         </div>
 
         {/* horizontal measure i.e. width */}
         <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
-          <span className="mb-[1.5px] md:mb-0.5">{sketchHeightPx}m</span>
+          <span className="mb-[1.5px] md:mb-0.5">{getWidth(sketchAspectRatio, sketchHeightPx)} m</span>
           <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
         </div>
 

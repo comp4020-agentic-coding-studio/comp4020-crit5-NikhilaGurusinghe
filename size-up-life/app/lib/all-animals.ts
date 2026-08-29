@@ -21,4 +21,25 @@ export const allAnimals: AnimalMetadata[] = [
     measuredDimension: Dimension.WIDTH,
     correctDimensionMeasurement: 33,
   },
+  {
+    imagePath: `${basePath}/images/blue-whale.png`,
+    imageAspectRatio: "1252 / 236",
+    animalName: "Blue Whale1",
+    measuredDimension: Dimension.WIDTH,
+    correctDimensionMeasurement: 33,
+  },
+  {
+    imagePath: `${basePath}/images/blue-whale.png`,
+    imageAspectRatio: "1252 / 236",
+    animalName: "Blue Whale2",
+    measuredDimension: Dimension.WIDTH,
+    correctDimensionMeasurement: 33,
+  },
+  {
+    imagePath: `${basePath}/images/blue-whale.png`,
+    imageAspectRatio: "1252 / 236",
+    animalName: "Blue Whale3",
+    measuredDimension: Dimension.WIDTH,
+    correctDimensionMeasurement: 33,
+  },
 ];

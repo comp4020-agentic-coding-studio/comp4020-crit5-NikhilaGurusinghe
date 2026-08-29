@@ -1,11 +1,17 @@
 import { basePath } from "@/lib/base-path";
+import { allAnimals } from "../lib/all-animals";
 import AnimalGraphic from "./animal-graphic";
 
-type GameContentProps = { guesses: number[]; activeGuessIndex: number };
+type GameContentProps = {
+  guesses: number[];
+  activeGuessIndex: number;
+  animalIndices: number[];
+};
 
 export default function GameContent({
   guesses,
   activeGuessIndex,
+  animalIndices,
 }: GameContentProps) {
   return (
     <main className="flex flex-row flex-1 h-full w-full items-end gap-10 overflow-x-scroll pb-3 pl-23 md:pl-25 px-3.5 mt-10">
@@ -17,14 +23,18 @@ export default function GameContent({
         animalName="Person"
         isGuessing={false}
       />
-      <AnimalGraphic
-        imagePath={`${basePath}/images/blue-whale.png`}
-        imageAltText="image of a blue whale"
-        sketchHeightPx={300}
-        sketchAspectRatio="1252 / 236"
-        animalName="Blue Whale asdasdasd asd ad sasdsadasdasdasdasdsada"
-        isGuessing={true}
-      />
+
+      {animalIndices.map((animalIndex: number, currIndex: number) => (
+        <AnimalGraphic
+          key={allAnimals[animalIndex].animalName}
+          imagePath={allAnimals[animalIndex].imagePath}
+          imageAltText={allAnimals[animalIndex].animalName}
+          sketchHeightPx={guesses[activeGuessIndex] * 500}
+          sketchAspectRatio={allAnimals[animalIndex].imageAspectRatio}
+          animalName={allAnimals[animalIndex].animalName}
+          isGuessing={activeGuessIndex === currIndex}
+        />
+      ))}
     </main>
   );
 }
