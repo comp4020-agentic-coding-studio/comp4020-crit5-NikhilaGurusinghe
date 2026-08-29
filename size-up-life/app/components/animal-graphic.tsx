@@ -123,15 +123,29 @@ export default function AnimalGraphic({
         style={{ direction: "rtl" }}
       /> */}
       <figure className="flex flex-col gap-y-4">
-        <div className="relative border-l-3 pl-3 rounded-xs before:absolute before:top-0 before:left-0 before:h-0.75 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.75 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl">
-          <ResizableP5Sketch
-            sketch={sketch}
-            sketchAltText={imageAltText}
-            sketchHeightPx={sketchHeightPx}
-            sketchAspectRatio={sketchAspectRatio}
-          />
+        <div className="inline-grid grid-cols-[auto_max-content] grid-rows-[auto_max-content] align-middle items-center">
+          {/* vertical measure i.e. height */}
+          <div className="col-start-1 row-start-2 h-full flex flex-row items-center justify-center">
+            <span className="mr-px md:mr-0.5 [writing-mode:vertical-lr] -scale-y-100 -scale-x-100" style={{ textOrientation: "sideways", }}>{sketchHeightPx}m</span>
+            <div className="relative border-l-3 pl-3 h-full rounded-xs before:absolute before:top-0 before:left-0 before:h-0.75 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.75 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
+          </div>
+
+          {/* horizontal measure i.e. width */}
+          <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
+            <span className="mb-px md:mb-0.5">{sketchHeightPx}m</span>
+            <div className="relative border-t-3 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.75 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.75 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
+          </div>
+          
+          <div className="col-start-2 row-start-2 h-full">
+            <ResizableP5Sketch
+              sketch={sketch}
+              sketchAltText={imageAltText}
+              sketchHeightPx={sketchHeightPx}
+              sketchAspectRatio={sketchAspectRatio}
+            />
+          </div>
         </div>
-        <figcaption className="self-start text-lg">{animalName}</figcaption>
+        <figcaption className="self-start text-lg ml-6">{animalName}</figcaption>
       </figure>
     </div>
   );
