@@ -20,10 +20,10 @@ export default function Navbar({
     <header>
       <nav className="flex flex-row items-center justify-between px-7 pt-9 md:px-9 md:pt-10">
         <h1 className="sr-only">{gameMode} Mode</h1>
-        <label className="text-6xl font-bold">
+        <span className="text-6xl font-bold">
           {guesses.length}
           <span className="text-xl ml-[5.5px] md:ml-1.5">in a row</span>
-        </label>
+        </span>
 
         <ul className="flex flex-row flex-nowrap gap-6 md:gap-5 justify-center items-center">
           <li>
@@ -47,12 +47,12 @@ export default function Navbar({
                       alt=""
                       aria-hidden={true}
                     />
-                    <label
+                    <span
                       className="absolute cursor-pointer left-1/2 -translate-x-1/2 top-1/2 -translate-y-[calc(50%-2px)] font-semibold text-sm"
                       aria-hidden={true}
                     >
                       {dayOfMonth}
-                    </label>
+                    </span>
                   </>
                 )}
                 {gameMode === GameMode.INFINITE && (
@@ -65,11 +65,11 @@ export default function Navbar({
                     aria-hidden={true}
                   />
                 )}
-                <label className="sr-only">{gameMode} Mode</label>
+                <span className="sr-only">{gameMode} Mode</span>
               </button>
-              <label className="absolute font-bold top-full left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <span className="absolute font-bold top-full left-1/2 -translate-x-1/2 -translate-y-1/2">
                 {gameMode}
-              </label>
+              </span>
             </div>
           </li>
           <li>
@@ -85,7 +85,7 @@ export default function Navbar({
                 alt=""
                 aria-hidden={true}
               />
-              <label className="sr-only">Retry current game</label>
+              <span className="sr-only">Retry current game</span>
             </button>
           </li>
         </ul>

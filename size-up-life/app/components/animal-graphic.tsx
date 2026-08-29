@@ -112,24 +112,27 @@ export default function AnimalGraphic({
 
   return (
     <div className="flex flex-row">
-      <input
-        className="[writing-mode:vertical-lr] [direction: ltr] [appearance: slider-vertical]"
+      {/* <input
+        className="[writing-mode:vertical-lr] [direction: ltr] [appearance: slider-vertical] h-20 self-end mb-10"
         type="range"
         min="0"
         max="1"
         step="0.01"
         defaultValue="0.5"
         orient="vertical"
-      />
-      <div className="flex flex-col gap-y-4">
-        <ResizableP5Sketch
-          sketch={sketch}
-          sketchAltText={imageAltText}
-          sketchHeightPx={sketchHeightPx}
-          sketchAspectRatio={sketchAspectRatio}
-        />
-        <label className="self-start text-lg">{animalName}</label>
-      </div>
+        style={{ direction: "rtl" }}
+      /> */}
+      <figure className="flex flex-col gap-y-4">
+        <div className="relative border-l-3 pl-3 rounded-xs before:absolute before:top-0 before:left-0 before:h-0.75 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.75 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl">
+          <ResizableP5Sketch
+            sketch={sketch}
+            sketchAltText={imageAltText}
+            sketchHeightPx={sketchHeightPx}
+            sketchAspectRatio={sketchAspectRatio}
+          />
+        </div>
+        <figcaption className="self-start text-lg">{animalName}</figcaption>
+      </figure>
     </div>
   );
 }
