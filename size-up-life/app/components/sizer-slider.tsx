@@ -15,7 +15,7 @@ export default function SizerSlider() {
           onClick={() =>
             setSliderValue((prevValue) => (prevValue += sliderStepSize))
           }
-          className="basis-1/12 mt-3 cursor-zoom-in text-white text-4xl active:scale-80 transition-all px-4"
+          className="basis-1/12 hover:scale-110 mt-3 cursor-zoom-in text-white text-4xl active:scale-80 transition-all px-4"
         >
           +
         </button>
@@ -36,7 +36,7 @@ export default function SizerSlider() {
           onClick={() =>
             setSliderValue((prevValue) => (prevValue -= sliderStepSize))
           }
-          className="basis-1/12 mb-3 cursor-zoom-out text-white text-4xl -mt-3 active:scale-80 transition-all px-5"
+          className="basis-1/12 hover:scale-110 mb-3 cursor-zoom-out text-white text-4xl -mt-3 active:scale-80 transition-all px-5"
         >
           -
         </button>
@@ -45,7 +45,7 @@ export default function SizerSlider() {
         type="button"
         className="bg-red-500 cursor-pointer px-5 mx-auto -mt-6 h-17 rounded-b-full flex justify-center items-center pt-3.5 w-[92%] text-white text-xl"
       >
-        <span className="active:scale-70 transition-all" aria-hidden={true}>
+        <span className="active:scale-70 transition-all hover:scale-120" aria-hidden={true}>
           ✔
         </span>
         <span className="sr-only">Confirm size guess?</span>

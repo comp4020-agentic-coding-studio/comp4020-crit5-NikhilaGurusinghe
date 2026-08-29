@@ -1,7 +1,9 @@
 import { basePath } from "@/lib/base-path";
 import AnimalGraphic from "./animal-graphic";
 
-export default function GameContent() {
+type GameContentProps = { activeGuessIndex: number };
+
+export default function GameContent({ activeGuessIndex }: GameContentProps) {
   return (
     <main className="flex flex-row flex-1 h-full w-full items-end gap-10 overflow-x-scroll pb-3 pl-23 md:pl-25 px-3.5 mt-10">
       <AnimalGraphic

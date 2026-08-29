@@ -21,7 +21,9 @@ export default function Navbar({
       <h1 className="sr-only">{gameMode} Mode</h1>
       <span className="text-6xl font-bold">
         {guesses.length}
-        <span className="text-xl ml-[5.5px] md:ml-1.5">in a row ⋅ {gameMode.toLowerCase()} mode</span>
+        <span className="text-xl ml-[5.5px] md:ml-1.5">
+          in a row ⋅ {gameMode.toLowerCase()} mode
+        </span>
       </span>
       <ul className="flex flex-row flex-nowrap gap-6 md:gap-5 justify-center items-center">
         <li>

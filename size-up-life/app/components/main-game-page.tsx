@@ -21,7 +21,7 @@ export default function MainGamePage() {
         />
         <SizerSlider />
       </header>
-      <GameContent />
+      <GameContent activeGuessIndex={activeGuessIndex} />
     </>
   );
 }
