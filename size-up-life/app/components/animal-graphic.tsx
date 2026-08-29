@@ -148,13 +148,13 @@ export default function AnimalGraphic({
           >
             {sketchHeightPx}m
           </span>
-          <div className="relative border-l-3 pl-3 h-full rounded-xs before:absolute before:top-0 before:left-0 before:h-0.75 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.75 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
+          <div className="relative border-l-2 pl-3 h-full rounded-xs before:absolute before:top-0 before:left-0 before:h-0.5 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
         </div>
 
         {/* horizontal measure i.e. width */}
         <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
           <span className="mb-[1.5px] md:mb-0.5">{sketchHeightPx}m</span>
-          <div className="relative border-t-3 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.75 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.75 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
+          <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
         </div>
 
         <div className="col-start-2 row-start-2 h-full">
@@ -168,7 +168,7 @@ export default function AnimalGraphic({
       </div>
 
       <figcaption
-        className="text-2xl contain-inline-size truncate ml-6 mt-4 md:mt-8"
+        className="text-2xl font-semibold contain-inline-size truncate ml-6 mt-4 md:mt-8"
         title={animalName}
       >
         {animalName}

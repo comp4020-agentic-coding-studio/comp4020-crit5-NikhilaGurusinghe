@@ -21,7 +21,7 @@ export default function Navbar({
       <h1 className="sr-only">{gameMode} Mode</h1>
       <span className="text-6xl font-bold">
         {guesses.length}
-        <span className="text-xl ml-[5.5px] md:ml-1.5">in a row</span>
+        <span className="text-xl ml-[5.5px] md:ml-1.5">in a row ⋅ {gameMode.toLowerCase()} mode</span>
       </span>
       <ul className="flex flex-row flex-nowrap gap-6 md:gap-5 justify-center items-center">
         <li>
@@ -35,7 +35,7 @@ export default function Navbar({
                   : () => setGameMode(GameMode.DAILY)
               }
             >
-              {gameMode === GameMode.DAILY && (
+              {gameMode === GameMode.INFINITE && (
                 <>
                   <Image
                     className="h-15 md:h-17 w-auto aspect-square mb-0.5"
@@ -53,7 +53,7 @@ export default function Navbar({
                   </span>
                 </>
               )}
-              {gameMode === GameMode.INFINITE && (
+              {gameMode === GameMode.DAILY && (
                 <Image
                   className="h-15 md:h-17 w-auto aspect-square mt-0.5"
                   src={`${basePath}/icons/infinite-thick.png`}
@@ -66,7 +66,7 @@ export default function Navbar({
               <span className="sr-only">{gameMode} Mode</span>
             </button>
             <span className="absolute font-bold top-full left-1/2 -translate-x-1/2 -translate-y-1/2">
-              {gameMode}
+              {gameMode === GameMode.DAILY ? GameMode.INFINITE : GameMode.DAILY}
             </span>
           </div>
         </li>
