@@ -72,6 +72,7 @@ export default function AnimalGraphic({
         defaultFillColour = p5.color("#000000");
         guessingFillColour = p5.color("#50a2ff");
 
+        // caching "?" mark and sampling from this so we don't have to render the letterform everytime
         guessGlyph = p5.createGraphics(GLYPH_BUFFER_PX, GLYPH_BUFFER_PX);
         guessGlyph.pixelDensity(1); 
         guessGlyph.clear();
@@ -119,6 +120,7 @@ export default function AnimalGraphic({
 
       p5.draw = () => {
         if (animalImage === undefined) return;
+        p5.background(255);
 
         const sampleResolution = 5;
 

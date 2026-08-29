@@ -29,7 +29,7 @@ export default function GameContent({
           key={allAnimals[animalIndex].animalName}
           imagePath={allAnimals[animalIndex].imagePath}
           imageAltText={allAnimals[animalIndex].animalName}
-          sketchHeightPx={guesses[activeGuessIndex] * 500}
+          sketchHeightPx={guesses[currIndex] * 500}
           sketchAspectRatio={allAnimals[animalIndex].imageAspectRatio}
           animalName={allAnimals[animalIndex].animalName}
           isGuessing={activeGuessIndex === currIndex}
