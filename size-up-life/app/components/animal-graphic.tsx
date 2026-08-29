@@ -36,6 +36,10 @@ export default function AnimalGraphic({
       const maxLerpDiameter: number = 6;
       let defaultFillColour: p5Types.Color;
       let guessingFillColour: p5Types.Color;
+      const GLYPH_BUFFER_PX = 128;
+      const GLYPH_TEXT_PX = 96;
+      const GLYPH_SCALE = GLYPH_BUFFER_PX / GLYPH_TEXT_PX;
+      let guessGlyph: p5Types.Graphics;
 
       // the size we have been asked for, written by updateWithProps
       let wantCanvasWidth: number = 50;
@@ -44,6 +48,7 @@ export default function AnimalGraphic({
       let animalImage: p5Types.Image | undefined;
       let halfToneDiameterScale: number = 2;
       let currentIsGuessing: boolean = false;
+
 
       let isSetup: boolean = false;
 
@@ -64,6 +69,19 @@ export default function AnimalGraphic({
       p5.setup = async () => {
         p5.createCanvas(wantCanvasWidth, wantCanvasHeight);
 
+        defaultFillColour = p5.color("#000000");
+        guessingFillColour = p5.color("#50a2ff");
+
+        guessGlyph = p5.createGraphics(GLYPH_BUFFER_PX, GLYPH_BUFFER_PX);
+        guessGlyph.pixelDensity(1); 
+        guessGlyph.clear();
+        guessGlyph.noStroke();
+        guessGlyph.fill(guessingFillColour);
+        guessGlyph.textAlign(p5.CENTER, p5.CENTER);
+        guessGlyph.textStyle(p5.BOLD);
+        guessGlyph.textSize(GLYPH_TEXT_PX);
+        guessGlyph.text("?", GLYPH_BUFFER_PX / 2, GLYPH_BUFFER_PX / 2);
+
         halfToneDiameterScale = p5.lerp(
           1,
           maxLerpDiameter,
@@ -77,9 +95,6 @@ export default function AnimalGraphic({
 
         animalImage = await p5.loadImage(imagePath);
         animalImage.loadPixels();
-
-        defaultFillColour = p5.color("#000000");
-        guessingFillColour = p5.color("#50a2ff");
   
         isSetup = true;
         tryResizeCanvas();
@@ -169,8 +184,8 @@ export default function AnimalGraphic({
             p5.noStroke();
 
             if (currentIsGuessing) {
-              p5.textSize(drawDiameter * 3);
-              p5.text("?", drawX, drawY);
+              const glyphSize: number = drawDiameter * 3 * GLYPH_SCALE;
+              p5.image(guessGlyph, drawX, drawY, glyphSize, glyphSize);
             } else {
               p5.circle(drawX, drawY, drawDiameter);
             }
