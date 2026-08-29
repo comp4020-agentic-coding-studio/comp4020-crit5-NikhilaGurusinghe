@@ -73,7 +73,7 @@ export default function Navbar({
             type="button"
           >
             <Image
-              className="h-11 md:h-12 w-auto aspect-square"
+              className="h-10 md:h-11 w-auto aspect-square"
               src={`${basePath}/icons/refresh-thick.png`}
               width={512}
               height={512}
