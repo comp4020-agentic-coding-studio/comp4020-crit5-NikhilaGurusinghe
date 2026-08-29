@@ -27,6 +27,8 @@ export default function AnimalGraphic({
     // constants
     const maxHeightPx: number = 1000;
     const maxLerpDiameter: number = 6;
+    const defaultFillColour: string = "#000000";
+    const guessingFillColour: string = "#50a2ff";
 
     // used for initialising the canvas size in p5.start see p5.updateWithProps for more info
     let newCanvasWidth: number = 50;
@@ -97,16 +99,39 @@ export default function AnimalGraphic({
 
           const diameter: number = p5.map(luma, 0, 255, 0, sampleResolution);
 
-          p5.fill(0);
-          p5.noStroke();
-          p5.circle(
-            p5.map(x, 0, animalImageP5.width, 0, p5.width + 10),
-            p5.map(y, 0, animalImageP5.height, 0, p5.height + 10),
-            diameter *
-              p5.lerp(1, 0.4, x / animalImageP5.width) *
-              p5.lerp(0.4, 1, y / animalImageP5.height) *
-              halfToneDiameterScale,
+          const drawX: number = p5.map(
+            x,
+            0,
+            animalImageP5.width,
+            0,
+            p5.width + 10,
           );
+          const drawY: number = p5.map(
+            y,
+            0,
+            animalImageP5.height,
+            0,
+            p5.height + 10,
+          );
+          const drawDiameter: number =
+            diameter *
+            p5.lerp(1, 0.4, x / animalImageP5.width) *
+            p5.lerp(0.4, 1, y / animalImageP5.height) *
+            halfToneDiameterScale;
+
+          p5.noStroke();
+
+          if (isGuessing) {
+            p5.fill(p5.color(guessingFillColour));
+            p5.textAlign(p5.CENTER, p5.CENTER);
+            p5.textStyle(p5.BOLD);
+            p5.textSize(drawDiameter * 3);
+
+            p5.text("?", drawX, drawY);
+          } else {
+            p5.fill(p5.color(defaultFillColour));
+            p5.circle(drawX, drawY, drawDiameter);
+          }
         }
       }
     };
