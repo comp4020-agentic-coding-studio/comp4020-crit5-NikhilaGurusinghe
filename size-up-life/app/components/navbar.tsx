@@ -29,7 +29,7 @@ export default function Navbar({
           <li>
             <div className="relative">
               <button
-                className="cursor-pointer"
+                className="relative cursor-pointer hover:scale-110 transition-all"
                 type="button"
                 onClick={
                   gameMode === GameMode.DAILY
@@ -48,7 +48,7 @@ export default function Navbar({
                       aria-hidden={true}
                     />
                     <label
-                      className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-[calc(50%+1.2px)] font-semibold text-sm"
+                      className="absolute cursor-pointer left-1/2 -translate-x-1/2 top-1/2 -translate-y-[calc(50%-2px)] font-semibold text-sm"
                       aria-hidden={true}
                     >
                       {dayOfMonth}
@@ -73,7 +73,10 @@ export default function Navbar({
             </div>
           </li>
           <li>
-            <button className="cursor-pointer" type="button">
+            <button
+              className="cursor-pointer hover:scale-110 transition-all"
+              type="button"
+            >
               <Image
                 className="h-10.5 md:h-11 w-auto aspect-square"
                 src={`${basePath}/icons/refresh-thick.png`}
