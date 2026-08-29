@@ -72,11 +72,11 @@ export default function Navbar({
         </li>
         <li>
           <button
-            className="cursor-pointer hover:scale-110 transition-all active:scale-90"
+            className="cursor-pointer hover:rotate-720 transition-all duration-500 active:scale-70 ease-in-out"
             type="button"
           >
             <Image
-              className="h-10.5 md:h-11 w-auto aspect-square"
+              className="h-11 md:h-12 w-auto aspect-square"
               src={`${basePath}/icons/refresh-thick.png`}
               width={512}
               height={512}

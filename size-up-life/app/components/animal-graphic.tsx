@@ -12,6 +12,7 @@ type AnimalGraphicProps = {
   sketchHeightPx: number;
   sketchAspectRatio: string;
   animalName: string;
+  isGuessing: boolean;
 };
 
 export default function AnimalGraphic({
@@ -20,6 +21,7 @@ export default function AnimalGraphic({
   sketchHeightPx,
   sketchAspectRatio,
   animalName,
+  isGuessing,
 }: AnimalGraphicProps) {
   const sketch: Sketch<ResizableSketchProps> = (p5) => {
     // constants

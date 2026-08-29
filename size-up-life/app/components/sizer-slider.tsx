@@ -10,7 +10,15 @@ export default function SizerSlider() {
         <label htmlFor="size" className="sr-only">
           Change size of animal
         </label>
-        <button type="button" onClick={() => setSliderValue((prevValue) => prevValue += sliderStepSize)} className="basis-1/12 mt-3 cursor-zoom-in text-white text-4xl active:scale-80 transition-all px-4">+</button>
+        <button
+          type="button"
+          onClick={() =>
+            setSliderValue((prevValue) => (prevValue += sliderStepSize))
+          }
+          className="basis-1/12 mt-3 cursor-zoom-in text-white text-4xl active:scale-80 transition-all px-4"
+        >
+          +
+        </button>
         <input
           name="size"
           className="cursor-grab active:cursor-grabbing [writing-mode:vertical-lr] [direction: ltr] [appearance: slider-vertical] basis-10/12 h-full"
@@ -19,14 +27,27 @@ export default function SizerSlider() {
           max="1"
           step={sliderStepSize}
           value={sliderValue}
-          onChange={e => setSliderValue(Number(e.target.value))}        
+          onChange={(e) => setSliderValue(Number(e.target.value))}
           orient="vertical"
           style={{ direction: "rtl" }}
         />
-        <button type="button" onClick={() => setSliderValue((prevValue) => prevValue -= sliderStepSize)} className="basis-1/12 mb-3 cursor-zoom-out text-white text-4xl -mt-3 active:scale-80 transition-all px-5">-</button>
+        <button
+          type="button"
+          onClick={() =>
+            setSliderValue((prevValue) => (prevValue -= sliderStepSize))
+          }
+          className="basis-1/12 mb-3 cursor-zoom-out text-white text-4xl -mt-3 active:scale-80 transition-all px-5"
+        >
+          -
+        </button>
       </div>
-      <button className="bg-red-500 cursor-pointer px-5 mx-auto -mt-6 h-17 rounded-b-full flex justify-center items-center pt-4 w-[92%] text-white text-xl">
-        <span className="active:scale-80 transition-all" aria-hidden={true}>✔</span>
+      <button
+        type="button"
+        className="bg-red-500 cursor-pointer px-5 mx-auto -mt-6 h-17 rounded-b-full flex justify-center items-center pt-3.5 w-[92%] text-white text-xl"
+      >
+        <span className="active:scale-70 transition-all" aria-hidden={true}>
+          ✔
+        </span>
         <span className="sr-only">Confirm size guess?</span>
       </button>
     </div>
