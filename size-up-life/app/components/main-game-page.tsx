@@ -32,6 +32,7 @@ export default function MainGamePage() {
         <SizerSlider
           setGuessesAtIndex={setGuessesAtIndex}
           activeGuessIndex={activeGuessIndex}
+          setActiveGuessIndex={setActiveGuessIndex}
         />
       </header>
       <GameContent guesses={guesses} activeGuessIndex={activeGuessIndex} />

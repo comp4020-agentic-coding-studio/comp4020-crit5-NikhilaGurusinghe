@@ -1,13 +1,15 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 
 type SizerSliderProps = {
   setGuessesAtIndex: (index: number, guess: number) => void;
   activeGuessIndex: number;
+  setActiveGuessIndex: Dispatch<SetStateAction<number>>;
 };
 
 export default function SizerSlider({
   setGuessesAtIndex,
   activeGuessIndex,
+  setActiveGuessIndex,
 }: SizerSliderProps) {
   const sliderStepSize: number = 0.01;
   const [sliderValue, setSliderValue] = useState<number>(0.5);
@@ -21,7 +23,7 @@ export default function SizerSlider({
         <button
           type="button"
           onClick={() =>
-            setSliderValue((prevValue) => (prevValue += sliderStepSize))
+            setSliderValue((prevValue: number) => (prevValue += sliderStepSize))
           }
           className="basis-1/12 hover:scale-110 mt-3 cursor-zoom-in text-white text-4xl active:scale-80 transition-all px-4"
         >
@@ -47,7 +49,7 @@ export default function SizerSlider({
         <button
           type="button"
           onClick={() =>
-            setSliderValue((prevValue) => (prevValue -= sliderStepSize))
+            setSliderValue((prevValue: number) => (prevValue -= sliderStepSize))
           }
           className="basis-1/12 hover:scale-110 mb-3 cursor-zoom-out text-white text-4xl -mt-3 active:scale-80 transition-all px-5"
         >
@@ -56,6 +58,9 @@ export default function SizerSlider({
       </div>
       <button
         type="button"
+        onClick={() =>
+          setActiveGuessIndex((prevGuessIndex: number) => (prevGuessIndex += 1))
+        }
         className="bg-red-500 cursor-pointer px-5 mx-auto -mt-6 h-17 rounded-b-full flex justify-center items-center pt-3.5 w-[92%] text-white text-xl"
       >
         <span
