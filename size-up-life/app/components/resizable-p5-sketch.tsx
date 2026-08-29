@@ -1,6 +1,7 @@
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import type { Sketch, SketchProps } from "@p5-wrapper/react";
 import { useResizeObserver } from "use-resize-observer";
+import getWidth from "./utils/get-width";
 
 export type ResizableSketchProps<Props extends SketchProps = SketchProps> =
   Props & {
@@ -34,27 +35,27 @@ export default function ResizableP5Sketch({
   // this dictates when the p5 canvas has a suitable width and height to size itself to
   // however the p5 canvas may still load (e.g. images) beforehand and show an ugly
   // loading screen in itself
-  const isDisplayable = width !== undefined && height !== undefined;
+  // const isDisplayable = width !== undefined && height !== undefined;
 
   return (
     <div
       ref={ref}
-      className="flex-none w-auto"
+      className="flex-none"
       style={{
-        aspectRatio: `${sketchAspectRatio}`,
         height: `${sketchHeightPx}px`,
+        width: `${getWidth(sketchAspectRatio, sketchHeightPx)}px`
       }}
       aria-label={sketchAltText}
       role="img"
     >
-      {isDisplayable && (
+      
         <NextReactP5Wrapper
           sketch={sketch}
-          parentWidth={width}
-          parentHeight={height}
+          parentWidth={width ?? 1}
+          parentHeight={height ?? 1}
           {...sketchProps}
         />
-      )}
+      
     </div>
   );
 }
