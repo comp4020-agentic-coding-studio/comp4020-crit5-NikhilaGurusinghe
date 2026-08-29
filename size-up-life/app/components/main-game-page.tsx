@@ -11,17 +11,30 @@ export default function MainGamePage() {
   const [guesses, setGuesses] = useState<number[]>([]);
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
 
+  // TODO make wrapper for set guesses that makes updating a single element easier
+  function setGuessesAtIndex(index: number, guess: number): void {
+    setGuesses((prevGuesses: number[]) => {
+      const newGuesses: number[] = [...prevGuesses];
+      newGuesses[index] = guess;
+
+      return newGuesses;
+    });
+  }
+
   return (
     <>
       <header>
         <Navbar
-          guesses={guesses}
+          activeGuessIndex={activeGuessIndex}
           gameMode={gameMode}
           setGameMode={setGameMode}
         />
-        <SizerSlider />
+        <SizerSlider
+          setGuessesAtIndex={setGuessesAtIndex}
+          activeGuessIndex={activeGuessIndex}
+        />
       </header>
-      <GameContent activeGuessIndex={activeGuessIndex} />
+      <GameContent guesses={guesses} activeGuessIndex={activeGuessIndex} />
     </>
   );
 }

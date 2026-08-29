@@ -1,6 +1,14 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export default function SizerSlider() {
+type SizerSliderProps = {
+  setGuessesAtIndex: (index: number, guess: number) => void;
+  activeGuessIndex: number;
+};
+
+export default function SizerSlider({
+  setGuessesAtIndex,
+  activeGuessIndex,
+}: SizerSliderProps) {
   const sliderStepSize: number = 0.01;
   const [sliderValue, setSliderValue] = useState<number>(0.5);
 
@@ -27,7 +35,12 @@ export default function SizerSlider() {
           max="1"
           step={sliderStepSize}
           value={sliderValue}
-          onChange={(e) => setSliderValue(Number(e.target.value))}
+          onChange={(e) => {
+            const sliderValue: number = Number(e.target.value);
+            setSliderValue(sliderValue);
+            setGuessesAtIndex(activeGuessIndex, sliderValue);
+            return;
+          }}
           orient="vertical"
           style={{ direction: "rtl" }}
         />
@@ -45,7 +58,10 @@ export default function SizerSlider() {
         type="button"
         className="bg-red-500 cursor-pointer px-5 mx-auto -mt-6 h-17 rounded-b-full flex justify-center items-center pt-3.5 w-[92%] text-white text-xl"
       >
-        <span className="active:scale-70 transition-all hover:scale-120" aria-hidden={true}>
+        <span
+          className="active:scale-70 transition-all hover:scale-120"
+          aria-hidden={true}
+        >
           ✔
         </span>
         <span className="sr-only">Confirm size guess?</span>
