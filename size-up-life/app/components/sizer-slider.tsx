@@ -25,8 +25,11 @@ export default function SizerSlider({
         <button
           type="button"
           onClick={() => {
-            const newSliderValue: number = Math.min(sliderMaxValue, sliderValue + sliderStepSize);
-            setSliderValue(newSliderValue)
+            const newSliderValue: number = Math.min(
+              sliderMaxValue,
+              sliderValue + sliderStepSize,
+            );
+            setSliderValue(newSliderValue);
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;
           }}
@@ -54,8 +57,11 @@ export default function SizerSlider({
         <button
           type="button"
           onClick={() => {
-            const newSliderValue: number = Math.max(sliderMinValue, sliderValue - sliderStepSize);
-            setSliderValue(newSliderValue)
+            const newSliderValue: number = Math.max(
+              sliderMinValue,
+              sliderValue - sliderStepSize,
+            );
+            setSliderValue(newSliderValue);
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;
           }}

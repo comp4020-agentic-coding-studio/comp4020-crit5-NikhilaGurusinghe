@@ -2,9 +2,11 @@
 
 import type { Sketch } from "@p5-wrapper/react";
 import type p5Types from "p5";
+import { useMemo } from "react";
 import ResizableP5Sketch, {
   type ResizableSketchProps,
 } from "./resizable-p5-sketch";
+import getWidth from "./utils/get-width";
 
 type AnimalGraphicProps = {
   imagePath: string;
@@ -12,6 +14,10 @@ type AnimalGraphicProps = {
   sketchHeightPx: number;
   sketchAspectRatio: string;
   animalName: string;
+  isGuessing: boolean;
+};
+
+type AnimalSketchProps = {
   isGuessing: boolean;
 };
 
@@ -23,125 +29,158 @@ export default function AnimalGraphic({
   animalName,
   isGuessing,
 }: AnimalGraphicProps) {
-  function getWidth(aspectRatio: string, height: number): number {
-    const [numerator, denominator] = aspectRatio.split(" / ").map(Number);
+  const sketch = useMemo<Sketch<ResizableSketchProps<AnimalSketchProps>>>(
+    () => (p5) => {
+      // constants
+      const maxHeightPx: number = 1000;
+      const maxLerpDiameter: number = 6;
+      let defaultFillColour: p5Types.Color;
+      let guessingFillColour: p5Types.Color;
 
-    return Math.round(height * (numerator / denominator));
-  }
- 
-  const sketch: Sketch<ResizableSketchProps> = (p5) => {
-    // constants
-    const maxHeightPx: number = 1000;
-    const maxLerpDiameter: number = 6;
-    const defaultFillColour: string = "#000000";
-    const guessingFillColour: string = "#50a2ff";
+      // the size we have been asked for, written by updateWithProps
+      let wantCanvasWidth: number = 50;
+      let wantCanvasHeight: number = 50;
 
-    // used for initialising the canvas size in p5.start see p5.updateWithProps for more info
-    let newCanvasWidth: number = 50;
-    let newCanvasHeight: number = 50;
-    // TODO idk why Image isn't sufficient enough of a type here
-    let animalImage: p5Types.Image | p5Types.FramebufferTexture | undefined;
-    let halfToneDiameterScale: number = 2;
+      let animalImage: p5Types.Image | undefined;
+      let halfToneDiameterScale: number = 2;
+      let currentIsGuessing: boolean = false;
 
-    p5.setup = async () => {
-      p5.createCanvas(newCanvasWidth, newCanvasHeight);
-      animalImage = await p5.loadImage(imagePath);
-      p5.imageMode(p5.CENTER); // this makes image positioning easier
-      // Turn off the draw loop. resizing canvas redraws when needed otherwise
-      // we don't need to constantly keep drawing
-      p5.noLoop();
-    };
+      let isSetup: boolean = false;
 
-    p5.updateWithProps = (props) => {
-      if (props.parentWidth === undefined || props.parentHeight === undefined)
-        return;
+      function tryResizeCanvas(): boolean {
+        if (wantCanvasWidth === p5.width && wantCanvasHeight === p5.height)
+          return false;
 
-      // this is purely for the race condition where the initial updateWithProps
-      // (from the resize observer) triggers before p5.setup() starts
-      newCanvasWidth = props.parentWidth;
-      newCanvasHeight = props.parentHeight;
+        halfToneDiameterScale = p5.lerp(
+          1,
+          maxLerpDiameter,
+          wantCanvasHeight / maxHeightPx,
+        );
 
-      halfToneDiameterScale = p5.lerp(
-        1,
-        maxLerpDiameter,
-        newCanvasHeight / maxHeightPx,
-      );
+        p5.resizeCanvas(wantCanvasWidth, wantCanvasHeight);
+        return true;
+      }
 
-      p5.resizeCanvas(newCanvasWidth, newCanvasHeight);
-    };
+      p5.setup = async () => {
+        p5.createCanvas(wantCanvasWidth, wantCanvasHeight);
 
-    p5.draw = () => {
-      if (animalImage === undefined) return;
+        halfToneDiameterScale = p5.lerp(
+          1,
+          maxLerpDiameter,
+          wantCanvasHeight / maxHeightPx,
+        );
 
-      const animalImageP5: p5Types.Image = animalImage as p5Types.Image;
+        p5.imageMode(p5.CENTER); // this makes image positioning easier
+        // Turn off the draw loop. resizing canvas redraws when needed otherwise
+        // we don't need to constantly keep drawing
+        p5.noLoop();
 
-      const sampleResolution = 5;
+        animalImage = await p5.loadImage(imagePath);
+        animalImage.loadPixels();
 
-      // halftoning - https://editor.p5js.org/chrsgrbr/sketches/mLNDLCYys
-      animalImageP5.loadPixels();
-      for (let x: number = 0; x < animalImageP5.width; x += sampleResolution) {
+        defaultFillColour = p5.color("#000000");
+        guessingFillColour = p5.color("#50a2ff");
+  
+        isSetup = true;
+        tryResizeCanvas();
+      };
+
+      p5.updateWithProps = (props) => {
+        if (props.parentWidth !== undefined)
+          wantCanvasWidth = props.parentWidth;
+        if (props.parentHeight !== undefined)
+          wantCanvasHeight = props.parentHeight;
+
+        const guessingChanged: boolean = props.isGuessing !== currentIsGuessing;
+        currentIsGuessing = props.isGuessing;
+
+        if (!isSetup) return;
+
+        const resized: boolean = tryResizeCanvas();
+
+        // changing when isGuessing has changed
+        if (guessingChanged && !resized) p5.redraw();
+      };
+
+      p5.draw = () => {
+        if (animalImage === undefined) return;
+
+        const sampleResolution = 5;
+
+        if (currentIsGuessing) {
+          p5.fill(guessingFillColour);
+          p5.textAlign(p5.CENTER, p5.CENTER);
+          p5.textStyle(p5.BOLD);
+        } else {
+          p5.fill(defaultFillColour);
+        }
+
+        // halftoning - https://editor.p5js.org/chrsgrbr/sketches/mLNDLCYys
         for (
-          let y: number = 0;
-          y < animalImageP5.height;
-          y += sampleResolution
+          let x: number = 0;
+          x < animalImage.width;
+          x += sampleResolution
         ) {
-          const i: number = (y * animalImageP5.width + x) * 4;
+          for (
+            let y: number = 0;
+            y < animalImage.height;
+            y += sampleResolution
+          ) {
+            const i: number = (y * animalImage.width + x) * 4;
 
-          const r: number = animalImageP5.pixels[i];
-          const g: number = animalImageP5.pixels[i + 1];
-          const b: number = animalImageP5.pixels[i + 2];
-          const a: number = animalImageP5.pixels[i + 3];
+            const r: number = animalImage.pixels[i];
+            const g: number = animalImage.pixels[i + 1];
+            const b: number = animalImage.pixels[i + 2];
+            const a: number = animalImage.pixels[i + 3];
 
-          // transparency
-          if (a === 0) {
-            continue;
-          }
+            // transparency
+            if (a === 0) {
+              continue;
+            }
 
-          if (r > 220 && g > 220 && b > 220) {
-            continue;
-          }
+            if (r > 220 && g > 220 && b > 220) {
+              continue;
+            }
 
-          const luma: number = 0.299 * r + 0.587 * g + 0.114 * b;
+            const luma: number = 0.299 * r + 0.587 * g + 0.114 * b;
 
-          const diameter: number = p5.map(luma, 0, 255, 0, sampleResolution);
+            const diameter: number = p5.map(luma, 0, 255, 0, sampleResolution);
 
-          const drawX: number = p5.map(
-            x,
-            0,
-            animalImageP5.width,
-            0,
-            p5.width + 10,
-          );
-          const drawY: number = p5.map(
-            y,
-            0,
-            animalImageP5.height,
-            0,
-            p5.height + 10,
-          );
-          const drawDiameter: number =
-            diameter *
-            p5.lerp(1, 0.4, x / animalImageP5.width) *
-            p5.lerp(0.4, 1, y / animalImageP5.height) *
-            halfToneDiameterScale;
+            const drawX: number = p5.map(
+              x,
+              0,
+              animalImage.width,
+              0,
+              p5.width + 10,
+            );
+            const drawY: number = p5.map(
+              y,
+              0,
+              animalImage.height,
+              0,
+              p5.height + 10,
+            );
+            const drawDiameter: number =
+              diameter *
+              p5.lerp(1, 0.4, x / animalImage.width) *
+              p5.lerp(0.4, 1, y / animalImage.height) *
+              halfToneDiameterScale;
 
-          p5.noStroke();
+            p5.noStroke();
 
-          if (isGuessing) {
-            p5.fill(p5.color(guessingFillColour));
-            p5.textAlign(p5.CENTER, p5.CENTER);
-            p5.textStyle(p5.BOLD);
-            p5.textSize(drawDiameter * 3);
-
-            p5.text("?", drawX, drawY);
-          } else {
-            p5.fill(p5.color(defaultFillColour));
-            p5.circle(drawX, drawY, drawDiameter);
+            if (currentIsGuessing) {
+              p5.textSize(drawDiameter * 3);
+              p5.text("?", drawX, drawY);
+            } else {
+              p5.circle(drawX, drawY, drawDiameter);
+            }
           }
         }
-      }
-    };
-  };
+      };
+    },
+    // imagePath is fixed for the lifetime of the component
+    [imagePath],
+  );
 
   return (
     <figure className="flex flex-col">
@@ -159,13 +198,16 @@ export default function AnimalGraphic({
 
         {/* horizontal measure i.e. width */}
         <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
-          <span className="mb-[1.5px] md:mb-0.5">{getWidth(sketchAspectRatio, sketchHeightPx)} m</span>
+          <span className="mb-[1.5px] md:mb-0.5">
+            {getWidth(sketchAspectRatio, sketchHeightPx)} m
+          </span>
           <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
         </div>
 
-        <div className="col-start-2 row-start-2 h-full">
+        <div className="col-start-2 row-start-2 h-full w-fit overflow-clip">
           <ResizableP5Sketch
             sketch={sketch}
+            sketchProps={{ isGuessing }}
             sketchAltText={imageAltText}
             sketchHeightPx={sketchHeightPx}
             sketchAspectRatio={sketchAspectRatio}
