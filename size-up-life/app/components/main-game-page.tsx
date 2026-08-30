@@ -12,15 +12,18 @@ import GameMode from "./utils/game-mode";
 import { convertMToPx, getHeight, getWidth } from "./utils/get-dimensions";
 
 export default function MainGamePage() {
+  const newGuessValue: number = 0.2;
+  const dailyAnimalsLimit: number = 5;
+  const guessTolerance: number = 10;
+  const maxHeightMultiplier: number = 100;
+
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
-  const [guesses, setGuesses] = useState<number[]>([0.2]);
+  const [guesses, setGuesses] = useState<number[]>([newGuessValue]);
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
   const [animalIndices, setAnimalIndices] = useState<number[]>([]);
   const [gameFinishState, setGameFinishState] = useState<GameFinishState>(
     GameFinishState.IN_PROGRESS,
   );
-  // TODO set this based on largest animal we have currently seen
-  const maxHeightMultiplier: number = 100;
   const [largestAnimalHeightIndex, setLargestAnimalHeightIndex] = useState<
     number | undefined
   >(undefined);
@@ -29,14 +32,13 @@ export default function MainGamePage() {
     width = 500, // okay default values TODO do we need this width or can we use
     height = 500,
   } = useResizeObserver<HTMLDivElement>();
-  const guessTolerance: number = 10;
+  
 
-  const dailyAnimalsLimit: number = 5;
 
   // add an animal on mount to the animalIndices array (do this only once)
   useEffect(() => {
     console.log("use effect");
-    selectNextAnimal(GameMode.DAILY, []);
+    selectNextAnimal(gameMode, animalIndices);
   }, []);
 
   console.log("animalIndices", animalIndices);
@@ -62,7 +64,7 @@ export default function MainGamePage() {
   function goToNextGuess(): void {
     const newActiveGuessIndex: number = activeGuessIndex + 1;
     setActiveGuessIndex(newActiveGuessIndex);
-    setGuessesAtIndex(newActiveGuessIndex, 0.5);
+    setGuessesAtIndex(newActiveGuessIndex, newGuessValue);
     // load up next animal index
     // TODO not using fresh values for gameMode, animalIndices passed in as arguments
     // into this method might be bad

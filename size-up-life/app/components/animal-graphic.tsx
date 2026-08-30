@@ -215,9 +215,9 @@ export default function AnimalGraphic({
 
   return (
     <figure className="flex flex-col">
-      <div className="inline-grid grid-cols-[auto_max-content] grid-rows-[auto_max-content]">
+      <div className="flex flex-row h-full items-end justify-center">
         {/* vertical measure i.e. height */}
-        <div className="col-start-1 row-start-2 h-full flex flex-row items-end justify-center">
+        <div className="h-full flex flex-row items-end justify-center pr-0.5 mb-px">
           <span
             className="mr-px md:mr-0.5 [writing-mode:vertical-lr] -scale-y-100 -scale-x-100"
             style={{ textOrientation: "sideways" }}
@@ -235,7 +235,6 @@ export default function AnimalGraphic({
             </span>{" "}
             <span className="text-xs">(wide)</span>
           </span>
-          <div className="relative border-l-2 pl-3 h-full rounded-xs before:absolute before:top-0 before:left-0 before:h-0.5 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
         </div>
 
         {/* horizontal measure i.e. width */}
@@ -246,7 +245,9 @@ export default function AnimalGraphic({
           <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
         </div> */}
 
-        <div className="col-start-2 row-start-2 h-full w-fit">
+        <div className="relative h-full w-full flex flex-row items-end justify-center pl-5">
+          <div className="absolute left-0 h-full border-l-2 pl-3 rounded-xs before:absolute before:top-0 before:left-0 before:h-0.5 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
+
           <ResizableP5Sketch
             sketch={sketch}
             sketchProps={{ isGuessing }}
@@ -259,7 +260,7 @@ export default function AnimalGraphic({
       </div>
 
       <figcaption
-        className="text-2xl font-semibold contain-inline-size truncate ml-6 mt-4 md:mt-8"
+        className="text-2xl font-semibold contain-inline-size ml-6 mt-4 md:mt-8 whitespace-nowrap"
         title={animalName}
       >
         {animalName}

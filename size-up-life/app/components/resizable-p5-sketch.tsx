@@ -44,7 +44,7 @@ export default function ResizableP5Sketch<
   return (
     <div
       ref={ref}
-      className="flex-none relative"
+      className=""
       style={{
         height: `${sketchHeightPx}px`,
         width: `${sketchWidthPx}px`,

@@ -15,7 +15,7 @@ export default function SizerSlider({
 }: SizerSliderProps) {
   const sliderStepSize: number = 0.01;
   const sliderMaxValue: number = 1;
-  const sliderMinValue: number = 0.1;
+  const sliderMinValue: number = 0.05;
 
   return (
     <div className="fixed z-67 top-1/2 -translate-y-1/2 left-0 h-1/2 ml-6 md:ml-7 w-13 md:w-14">
