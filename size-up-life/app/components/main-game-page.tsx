@@ -14,8 +14,11 @@ import { convertMToPx, getHeight, getWidth } from "./utils/get-dimensions";
 export default function MainGamePage() {
   const newGuessValue: number = 0.2;
   const dailyAnimalsLimit: number = 5;
-  const guessTolerance: number = 10;
+  const guessToleranceM: number = 0.5;
+  // TODO to make this larger you're going to have to get smarter as at numbers larger than
+  // this the p5 canvas takes up too much memory and crashes the site
   const maxHeightMultiplier: number = 100;
+  const maxPossibleAnimalHeight: number = 15;
 
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
   const [guesses, setGuesses] = useState<number[]>([newGuessValue]);
@@ -74,47 +77,54 @@ export default function MainGamePage() {
   function selectNextAnimal(gameMode: GameMode, animalIndices: number[]): void {
     // checking if you can advance to the next state (i.e. checking our guess is correct)
     // if blank animalIndices don't do this check
-    // if (animalIndices.length !== 0) {
-    //   const currAnimal: AnimalMetadata =
-    //     allAnimals[animalIndices[activeGuessIndex]];
-    //   const currAnimalHeightPx: number = guesses[activeGuessIndex] * maxHeight;
-    //   // we need to calculate based on which dimension we're checking
-    //   if (currAnimal.measuredDimension === Dimension.HEIGHT) {
-    //     if (
-    //       !(
-    //         currAnimal.correctDimensionMeasurement >=
-    //           currAnimalHeightPx - guessTolerance &&
-    //         currAnimal.correctDimensionMeasurement <=
-    //           currAnimalHeightPx + guessTolerance
-    //       )
-    //     ) {
-    //       // if we aren't in the correct guess interval (with tolerance)
-    //       // return immediately and we've lost
-    //       setGameFinishState(GameFinishState.LOST);
-    //       return;
-    //     }
-    //   } else {
-    //     // currAnimal.measuredDimension === Dimension.WIDTH
-    //     // TODO need to convert into M from px
-    //     const currAnimalWidth: number = getWidth(
-    //       currAnimal.imageAspectRatio,
-    //       currAnimalHeightPx,
-    //     );
-    //     if (
-    //       !(
-    //         currAnimal.correctDimensionMeasurement >=
-    //           currAnimalWidth - guessTolerance &&
-    //         currAnimal.correctDimensionMeasurement <=
-    //           currAnimalWidth + guessTolerance
-    //       )
-    //     ) {
-    //       // if we aren't in the correct guess interval (with tolerance)
-    //       // return immediately and we've lost
-    //       setGameFinishState(GameFinishState.LOST);
-    //       return;
-    //     }
-    //   }
-    // }
+    // TODO rejig guessHeightPx and guessWidthPx
+    if (animalIndices.length !== 0) {
+      const mToPxModifier: number = maxPossibleAnimalHeight * maxHeightMultiplier;
+      const currAnimal: AnimalMetadata =
+        allAnimals[animalIndices[activeGuessIndex]];
+      const currAnimalCorrectMeasurementPx: number = currAnimal.correctDimensionMeasurement * maxHeightMultiplier;
+      const guessHeightPx: number = guesses[activeGuessIndex] * mToPxModifier;
+      const guessTolerancePx: number = guessToleranceM * maxHeightMultiplier;
+      // we need to calculate based on which dimension we're checking
+      if (currAnimal.measuredDimension === Dimension.WIDTH) {
+        // need to get the guessHeightPx here as we are comparing currAnimal.height with guessHeightPx
+        const guessWidthPx: number = getWidth(currAnimal.imageAspectRatio, guessHeightPx);
+        if (
+          !(
+            currAnimalCorrectMeasurementPx >=
+            guessWidthPx - guessTolerancePx &&
+              currAnimalCorrectMeasurementPx <=
+              guessWidthPx + guessTolerancePx
+          )
+        ) {
+          // if we aren't in the correct guess interval (with tolerance)
+          // return immediately and we've lost
+          setGameFinishState(GameFinishState.LOST);
+        console.log("ROUND LOST measurement width", currAnimalCorrectMeasurementPx, "animalpx", guessWidthPx, "guessWidth", guesses[activeGuessIndex], activeGuessIndex)
+        return;
+        }
+        console.log("ROUND WON")
+      } else {
+        // currAnimal.measuredDimension === Dimension.HEIGHT
+        // TODO need to convert into M from px
+        if (
+          !(
+            currAnimalCorrectMeasurementPx >=
+              guessHeightPx - guessTolerancePx &&
+              currAnimalCorrectMeasurementPx <=
+              guessHeightPx + guessTolerancePx
+          )
+        ) {
+          // if we aren't in the correct guess interval (with tolerance)
+          // return immediately and we've lost
+          setGameFinishState(GameFinishState.LOST);
+          console.log("ROUND LOST measurement height", currAnimalCorrectMeasurementPx, "animalpx", guessHeightPx, "guessHeight", guesses[activeGuessIndex], activeGuessIndex)
+          return;
+        }
+        console.log("ROUND WON")
+
+      }
+    }
 
     // if we're down here we are definitely adding an animal
     let nextAnimalIndex: number = 0;
@@ -247,7 +257,7 @@ export default function MainGamePage() {
         guesses={guesses}
         activeGuessIndex={activeGuessIndex}
         animalIndices={animalIndices}
-        maxHeight={15 * maxHeightMultiplier}
+        maxHeight={maxPossibleAnimalHeight * maxHeightMultiplier}
         heightMtoPxModifier={maxHeightMultiplier}
       />
     </>
