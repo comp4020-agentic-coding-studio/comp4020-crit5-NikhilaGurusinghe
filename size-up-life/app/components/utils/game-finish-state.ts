@@ -1,7 +1,7 @@
-enum GameFinishState {
+enum GameState {
   IN_PROGRESS,
   LOST,
   WON,
 }
 
-export default GameFinishState;
+export default GameState;

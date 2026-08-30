@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from "react";
 import seedrandom from "seedrandom";
-import { useResizeObserver } from "use-resize-observer";
 import { type AnimalMetadata, allAnimals, Dimension } from "../lib/all-animals";
 import GameContent from "./game-content";
 import Navbar from "./navbar";
 import SizerSlider from "./sizer-slider";
-import GameFinishState from "./utils/game-finish-state";
+import GameState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
 import { getHeight, getWidth } from "./utils/get-dimensions";
+import dynamic from "next/dynamic";
+import WinLossDialogue from "./win-loss-dialogue";
 
 export default function MainGamePage() {
   const newGuessValue: number = 0.2;
@@ -24,8 +25,8 @@ export default function MainGamePage() {
   const [guesses, setGuesses] = useState<number[]>([newGuessValue]);
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
   const [animalIndices, setAnimalIndices] = useState<number[]>([]);
-  const [gameFinishState, setGameFinishState] = useState<GameFinishState>(
-    GameFinishState.IN_PROGRESS,
+  const [gameState, setGameState] = useState<GameState>(
+    GameState.IN_PROGRESS,
   );
   const [largestAnimalHeightIndex, setLargestAnimalHeightIndex] = useState<
     number | undefined
@@ -34,7 +35,7 @@ export default function MainGamePage() {
   // add an animal on mount to the animalIndices array (do this only once)
   useEffect(() => {
     console.log("use effect");
-    selectNextAnimal(gameMode, animalIndices);
+    selectNextAnimal(gameMode, animalIndices, activeGuessIndex);
   }, []);
 
   console.log("animalIndices", animalIndices);
@@ -59,15 +60,18 @@ export default function MainGamePage() {
 
   function goToNextGuess(): void {
     const newActiveGuessIndex: number = activeGuessIndex + 1;
-    setActiveGuessIndex(newActiveGuessIndex);
-    setGuessesAtIndex(newActiveGuessIndex, newGuessValue);
+
     // load up next animal index
     // TODO not using fresh values for gameMode, animalIndices passed in as arguments
     // into this method might be bad
-    selectNextAnimal(gameMode, animalIndices);
+    if (selectNextAnimal(gameMode, animalIndices, activeGuessIndex) === GameState.IN_PROGRESS) {
+      console.log("yes");
+      setActiveGuessIndex(newActiveGuessIndex);
+      setGuessesAtIndex(newActiveGuessIndex, newGuessValue);
+    }  
   }
 
-  function selectNextAnimal(gameMode: GameMode, animalIndices: number[]): void {
+  function selectNextAnimal(gameMode: GameMode, animalIndices: number[], activeGuessIndex: number): GameState {
     // checking if you can advance to the next state (i.e. checking our guess is correct)
     // if blank animalIndices don't do this check
     if (animalIndices.length !== 0) {
@@ -75,6 +79,7 @@ export default function MainGamePage() {
         maxPossibleAnimalHeight * maxHeightMultiplier;
       const currAnimal: AnimalMetadata =
         allAnimals[animalIndices[activeGuessIndex]];
+      console.log(activeGuessIndex);
       const currAnimalCorrectMeasurementPx: number =
         currAnimal.correctDimensionMeasurement * maxHeightMultiplier;
       const guessHeightPx: number = guesses[activeGuessIndex] * mToPxModifier;
@@ -94,7 +99,7 @@ export default function MainGamePage() {
         ) {
           // if we aren't in the correct guess interval (with tolerance)
           // return immediately and we've lost
-          setGameFinishState(GameFinishState.LOST);
+          setGameState(GameState.LOST);
           console.log(
             "ROUND LOST measurement width",
             currAnimalCorrectMeasurementPx,
@@ -104,7 +109,7 @@ export default function MainGamePage() {
             guesses[activeGuessIndex],
             activeGuessIndex,
           );
-          return;
+          return GameState.LOST;
         }
         console.log("ROUND WON");
       } else {
@@ -119,7 +124,7 @@ export default function MainGamePage() {
         ) {
           // if we aren't in the correct guess interval (with tolerance)
           // return immediately and we've lost
-          setGameFinishState(GameFinishState.LOST);
+          setGameState(GameState.LOST);
           console.log(
             "ROUND LOST measurement height",
             currAnimalCorrectMeasurementPx,
@@ -129,7 +134,7 @@ export default function MainGamePage() {
             guesses[activeGuessIndex],
             activeGuessIndex,
           );
-          return;
+          return GameState.LOST;
         }
         console.log("ROUND WON");
       }
@@ -144,8 +149,8 @@ export default function MainGamePage() {
       // so you win
       if (animalIndices.length >= dailyAnimalsLimit) {
         // you won!
-        setGameFinishState(GameFinishState.WON);
-        return;
+        setGameState(GameState.WON);
+        return GameState.WON;
       }
 
       // get random seed based on day/month/year
@@ -187,8 +192,8 @@ export default function MainGamePage() {
         // nextAnimalIndex = 0;
 
         // you won!
-        setGameFinishState(GameFinishState.WON);
-        return;
+        setGameState(GameState.WON);
+        return GameState.WON;
       }
     }
 
@@ -211,6 +216,8 @@ export default function MainGamePage() {
         setLargestAnimalHeightIndex(nextAnimalIndex);
       }
     }
+
+    return GameState.IN_PROGRESS;
   }
 
   function getAnimalHeight(animalIndex: number): number {
@@ -236,8 +243,9 @@ export default function MainGamePage() {
     // clear our animal Indices fully
     setAnimalIndices([]);
     setGameMode(nextGameMode);
+    setActiveGuessIndex(0);
 
-    selectNextAnimal(nextGameMode, nextAnimalIndices);
+    selectNextAnimal(nextGameMode, nextAnimalIndices, 0);
   }
 
   // TODO go into GameContent and have something that fires when activeGuessIndex changes
@@ -261,13 +269,16 @@ export default function MainGamePage() {
           goToNextGuess={goToNextGuess}
         />
       </header>
-      <GameContent
-        guesses={guesses}
-        activeGuessIndex={activeGuessIndex}
-        animalIndices={animalIndices}
-        maxHeight={maxPossibleAnimalHeight * maxHeightMultiplier}
-        heightMtoPxModifier={maxHeightMultiplier}
-      />
+      <div className="h-full flex flex-col overflow-hidden">
+       <WinLossDialogue gameMode={gameMode} isWin={true} streak={activeGuessIndex}/>
+        <GameContent
+          guesses={guesses}
+          activeGuessIndex={activeGuessIndex}
+          animalIndices={animalIndices}
+          maxHeight={maxPossibleAnimalHeight * maxHeightMultiplier}
+          heightMtoPxModifier={maxHeightMultiplier}
+        />
+      </div>
     </>
   );
 }

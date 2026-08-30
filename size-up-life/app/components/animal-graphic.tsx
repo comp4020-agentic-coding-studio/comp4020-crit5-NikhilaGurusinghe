@@ -254,7 +254,6 @@ export default function AnimalGraphic({
             sketchAltText={imageAltText}
             sketchHeightPx={sketchHeightPx}
             sketchWidthPx={getWidth(sketchAspectRatio, sketchHeightPx)}
-            sketchAspectRatio={sketchAspectRatio}
           />
         </div>
       </div>

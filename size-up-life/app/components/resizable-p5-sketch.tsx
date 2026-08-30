@@ -13,7 +13,6 @@ interface ResizableP5Props<Props extends SketchProps = SketchProps> {
   sketchProps?: Props;
   sketchHeightPx: number;
   sketchWidthPx: number;
-  sketchAspectRatio: string;
   sketchAltText: string;
 }
 
