@@ -35,9 +35,9 @@ export default function WinLossDialogue({
       <div
         className={`flex flex-col w-7/8 sm:w-6/8 md:w-1/2 h-full my-5 ${isWin ? "bg-yellow-300 text-black" : "bg-red-500 text-gray-100"} rounded-[60px] z-70 p-10 overflow-y-auto`}
       >
-        <h1 className="text-6xl font-bold">
+        <h2 className="text-6xl font-bold">
           {isWin ? "You won!" : "Oh no, you lost..."}
-        </h1>
+        </h2>
         <section className="text-lg/5.5 mt-3 text-pretty mb-10 flex flex-col">
           {isWin && (
             <>
