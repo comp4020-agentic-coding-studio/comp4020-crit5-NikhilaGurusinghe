@@ -9,6 +9,7 @@ type GameContentProps = {
   activeGuessIndex: number;
   animalIndices: number[];
   maxHeight: number;
+  heightMtoPxModifier: number;
 };
 
 export default function GameContent({
@@ -17,20 +18,22 @@ export default function GameContent({
   activeGuessIndex,
   animalIndices,
   maxHeight,
+  heightMtoPxModifier,
 }: GameContentProps) {
   return (
     <main className="flex h-full min-h-0 flex-col overflow-x-auto overflow-y-auto">
       <div
         ref={ref}
-        className="flex  flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25"
+        className="flex flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25"
       >
         <AnimalGraphic
           imagePath={`${basePath}/images/person.png`}
           imageAltText="A person"
-          sketchHeightPx={400}
+          sketchHeightPx={1.85 * heightMtoPxModifier}
           sketchAspectRatio="188 / 816"
           animalName="Person"
           isGuessing={false}
+          sketchMToPxHeightModifier={heightMtoPxModifier}
         />
 
         {animalIndices.map((animalIndex: number, currIndex: number) => (
@@ -42,6 +45,7 @@ export default function GameContent({
             sketchAspectRatio={allAnimals[animalIndex].imageAspectRatio}
             animalName={allAnimals[animalIndex].animalName}
             isGuessing={activeGuessIndex === currIndex}
+            sketchMToPxHeightModifier={heightMtoPxModifier}
           />
         ))}
       </div>

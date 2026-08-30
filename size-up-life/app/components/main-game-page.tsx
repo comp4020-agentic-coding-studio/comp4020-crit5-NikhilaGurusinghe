@@ -9,7 +9,7 @@ import Navbar from "./navbar";
 import SizerSlider from "./sizer-slider";
 import GameFinishState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
-import { getWidth } from "./utils/get-dimensions";
+import { convertMToPx, getHeight, getWidth } from "./utils/get-dimensions";
 
 export default function MainGamePage() {
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
@@ -20,13 +20,13 @@ export default function MainGamePage() {
     GameFinishState.IN_PROGRESS,
   );
   // TODO set this based on largest animal we have currently seen
-  const maxHeight: number = 500;
+  const maxHeightMultiplier: number = 100;
   const [largestAnimalHeightIndex, setLargestAnimalHeightIndex] = useState<
     number | undefined
   >(undefined);
   const {
     ref,
-    width = 500, // okay default values
+    width = 500, // okay default values TODO do we need this width or can we use 
     height = 500,
   } = useResizeObserver<HTMLDivElement>();
   const guessTolerance: number = 10;
@@ -72,47 +72,47 @@ export default function MainGamePage() {
   function selectNextAnimal(gameMode: GameMode, animalIndices: number[]): void {
     // checking if you can advance to the next state (i.e. checking our guess is correct)
     // if blank animalIndices don't do this check
-    if (animalIndices.length !== 0) {
-      const currAnimal: AnimalMetadata =
-        allAnimals[animalIndices[activeGuessIndex]];
-      const currAnimalHeightPx: number = guesses[activeGuessIndex] * maxHeight;
-      // we need to calculate based on which dimension we're checking
-      if (currAnimal.measuredDimension === Dimension.HEIGHT) {
-        if (
-          !(
-            currAnimal.correctDimensionMeasurement >=
-              currAnimalHeightPx - guessTolerance &&
-            currAnimal.correctDimensionMeasurement <=
-              currAnimalHeightPx + guessTolerance
-          )
-        ) {
-          // if we aren't in the correct guess interval (with tolerance)
-          // return immediately and we've lost
-          setGameFinishState(GameFinishState.LOST);
-          return;
-        }
-      } else {
-        // currAnimal.measuredDimension === Dimension.WIDTH
-        // TODO need to convert into M from px
-        const currAnimalWidth: number = getWidthPx(
-          currAnimal.imageAspectRatio,
-          currAnimalHeightPx,
-        );
-        if (
-          !(
-            currAnimal.correctDimensionMeasurement >=
-              currAnimalWidth - guessTolerance &&
-            currAnimal.correctDimensionMeasurement <=
-              currAnimalWidth + guessTolerance
-          )
-        ) {
-          // if we aren't in the correct guess interval (with tolerance)
-          // return immediately and we've lost
-          setGameFinishState(GameFinishState.LOST);
-          return;
-        }
-      }
-    }
+    // if (animalIndices.length !== 0) {
+    //   const currAnimal: AnimalMetadata =
+    //     allAnimals[animalIndices[activeGuessIndex]];
+    //   const currAnimalHeightPx: number = guesses[activeGuessIndex] * maxHeight;
+    //   // we need to calculate based on which dimension we're checking
+    //   if (currAnimal.measuredDimension === Dimension.HEIGHT) {
+    //     if (
+    //       !(
+    //         currAnimal.correctDimensionMeasurement >=
+    //           currAnimalHeightPx - guessTolerance &&
+    //         currAnimal.correctDimensionMeasurement <=
+    //           currAnimalHeightPx + guessTolerance
+    //       )
+    //     ) {
+    //       // if we aren't in the correct guess interval (with tolerance)
+    //       // return immediately and we've lost
+    //       setGameFinishState(GameFinishState.LOST);
+    //       return;
+    //     }
+    //   } else {
+    //     // currAnimal.measuredDimension === Dimension.WIDTH
+    //     // TODO need to convert into M from px
+    //     const currAnimalWidth: number = getWidth(
+    //       currAnimal.imageAspectRatio,
+    //       currAnimalHeightPx,
+    //     );
+    //     if (
+    //       !(
+    //         currAnimal.correctDimensionMeasurement >=
+    //           currAnimalWidth - guessTolerance &&
+    //         currAnimal.correctDimensionMeasurement <=
+    //           currAnimalWidth + guessTolerance
+    //       )
+    //     ) {
+    //       // if we aren't in the correct guess interval (with tolerance)
+    //       // return immediately and we've lost
+    //       setGameFinishState(GameFinishState.LOST);
+    //       return;
+    //     }
+    //   }
+    // }
 
     // if we're down here we are definitely adding an animal
     let nextAnimalIndex: number = 0;
@@ -178,6 +178,7 @@ export default function MainGamePage() {
     const nextAnimalHeight: number = getAnimalHeight(nextAnimalIndex);
 
     if (largestAnimalHeightIndex === undefined) {
+      console.log(nextAnimalHeight, "index", nextAnimalIndex)
       // always larger
       setLargestAnimalHeightIndex(nextAnimalIndex);
     } else {
@@ -186,7 +187,7 @@ export default function MainGamePage() {
         largestAnimalHeightIndex,
       );
       if (nextAnimalHeight > largestAnimalHeight) {
-        setLargestAnimalHeightIndex(nextAnimalHeight);
+        setLargestAnimalHeightIndex(nextAnimalIndex);
       }
     }
   }
@@ -203,7 +204,7 @@ export default function MainGamePage() {
 
     return animal.measuredDimension === Dimension.HEIGHT
       ? animal.correctDimensionMeasurement
-      : getWidth(animal.imageAspectRatio, animal.correctDimensionMeasurement);
+      : getHeight(animal.imageAspectRatio, animal.correctDimensionMeasurement);
   }
 
   function changeGameMode(): void {
@@ -221,6 +222,8 @@ export default function MainGamePage() {
   // TODO go into GameContent and have something that fires when activeGuessIndex changes
   //    that checks if we got the guess right or wrong, and then do confetti or failure message
   //    if confetti keep going otherwise don't
+
+  // TODO scroll to end of scroll bar when new animal is added
 
   return (
     <>
@@ -241,7 +244,8 @@ export default function MainGamePage() {
         guesses={guesses}
         activeGuessIndex={activeGuessIndex}
         animalIndices={animalIndices}
-        maxHeight={1000}
+        maxHeight={(largestAnimalHeightIndex === undefined ? 30 : getAnimalHeight(largestAnimalHeightIndex)) * maxHeightMultiplier}
+        heightMtoPxModifier={maxHeightMultiplier}
       />
     </>
   );

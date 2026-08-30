@@ -14,7 +14,7 @@ export default function SizerSlider({
   const sliderStepSize: number = 0.01;
   const [sliderValue, setSliderValue] = useState<number>(0.5);
   const sliderMaxValue: number = 1;
-  const sliderMinValue: number = 0;
+  const sliderMinValue: number = 0.1;
 
   return (
     <div className="fixed z-67 top-1/2 -translate-y-1/2 left-0 h-1/2 ml-6 md:ml-7 w-13 md:w-14">
@@ -33,7 +33,7 @@ export default function SizerSlider({
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;
           }}
-          className="basis-1/12 hover:scale-110 mt-3 cursor-zoom-in text-white text-4xl active:scale-80 transition-all px-4"
+          className="basis-1/12 hover:scale-110 mt-3 cursor-zoom-in text-white text-4xl active:scale-80 transition-all px-4 select-none"
         >
           +
         </button>
@@ -65,7 +65,7 @@ export default function SizerSlider({
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;
           }}
-          className="basis-1/12 hover:scale-110 mb-3 cursor-zoom-out text-white text-4xl -mt-3 active:scale-80 transition-all px-5"
+          className="basis-1/12 hover:scale-110 mb-3 cursor-zoom-out text-white text-4xl -mt-3 active:scale-80 transition-all px-5 select-none"
         >
           -
         </button>
@@ -76,7 +76,7 @@ export default function SizerSlider({
         className="bg-red-500 cursor-pointer px-5 mx-auto -mt-6 h-17 rounded-b-full flex justify-center items-center pt-3.5 w-[92%] text-white text-xl"
       >
         <span
-          className="active:scale-70 transition-all hover:scale-120"
+          className="active:scale-70 transition-all hover:scale-120 select-none"
           aria-hidden={true}
         >
           ✔
