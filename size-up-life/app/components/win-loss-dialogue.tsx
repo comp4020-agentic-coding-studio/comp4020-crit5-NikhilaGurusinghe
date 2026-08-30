@@ -15,6 +15,7 @@ type WinLossDialogueProps = {
   streak: number;
   isVisible: boolean;
   setGameState: Dispatch<SetStateAction<GameState>>;
+  resetGameMode: () => void;
 };
 
 export default function WinLossDialogue({
@@ -23,6 +24,7 @@ export default function WinLossDialogue({
   streak,
   isVisible,
   setGameState,
+  resetGameMode
 }: WinLossDialogueProps) {
   return (
     <>
@@ -83,7 +85,11 @@ export default function WinLossDialogue({
           </section>
           <button
             type="button"
-            onClick={() => setGameState(GameState.IN_PROGRESS)}
+            onClick={() => {
+              if (!isWin) resetGameMode();
+              setGameState(GameState.IN_PROGRESS);
+              return;
+            }}
             className="relative mt-auto bottom-0 cursor-pointer font-semibold rounded-full py-10 px-8.5 w-full"
           >
             <div className="absolute inset-0 h-full w-full bg-gray-100 transition-all hover:bg-white hover:scale-y-103 hover:scale-x-101 active:scale-y-97 active:scale-x-99 rounded-full" />

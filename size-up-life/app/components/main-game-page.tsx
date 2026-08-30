@@ -293,6 +293,7 @@ export default function MainGamePage() {
           isVisible={gameState !== GameState.IN_PROGRESS}
           streak={activeGuessIndex}
           setGameState={setGameState}
+          resetGameMode={resetCurrentGameMode}
         />
         <GameContent
           isAriaHidden={gameState !== GameState.IN_PROGRESS}

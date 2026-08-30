@@ -22,6 +22,7 @@ export default function GameContent({
 }: GameContentProps) {
   const scrollTargetRef = useCallback((divElement: HTMLDivElement) => {
     if (divElement) {
+      // TODO need to make this more precise
       setTimeout(() => {
         divElement.scrollIntoView({
           behavior: "smooth",
@@ -39,6 +40,9 @@ export default function GameContent({
     >
       <div className="flex flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25">
         <AnimalGraphic
+          scrollTargetRef={
+            activeGuessIndex !== 0 ? undefined : scrollTargetRef
+          }
           imagePath={`${basePath}/images/person.png`}
           imageAltText="A person"
           sketchHeightPx={1.85 * heightMtoPxModifier}
