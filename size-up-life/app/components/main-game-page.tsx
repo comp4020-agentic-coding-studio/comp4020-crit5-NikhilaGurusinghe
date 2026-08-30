@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import seedrandom from "seedrandom";
+import { useResizeObserver } from "use-resize-observer";
 import { type AnimalMetadata, allAnimals, Dimension } from "../lib/all-animals";
 import GameContent from "./game-content";
 import Navbar from "./navbar";
 import SizerSlider from "./sizer-slider";
 import GameFinishState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
-import getWidth from "./utils/get-width";
+import { getWidth } from "./utils/get-dimensions";
 
 export default function MainGamePage() {
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
@@ -18,8 +19,16 @@ export default function MainGamePage() {
   const [gameFinishState, setGameFinishState] = useState<GameFinishState>(
     GameFinishState.IN_PROGRESS,
   );
-  // TODO set this based on viewport size
+  // TODO set this based on largest animal we have currently seen
   const maxHeight: number = 500;
+  const [largestAnimalHeightIndex, setLargestAnimalHeightIndex] = useState<
+    number | undefined
+  >(undefined);
+  const {
+    ref,
+    width = 500, // okay default values
+    height = 500,
+  } = useResizeObserver<HTMLDivElement>();
   const guessTolerance: number = 10;
 
   const dailyAnimalsLimit: number = 5;
@@ -66,8 +75,7 @@ export default function MainGamePage() {
     if (animalIndices.length !== 0) {
       const currAnimal: AnimalMetadata =
         allAnimals[animalIndices[activeGuessIndex]];
-      const currAnimalHeightPx: number =
-        guesses[activeGuessIndex] * maxHeight;
+      const currAnimalHeightPx: number = guesses[activeGuessIndex] * maxHeight;
       // we need to calculate based on which dimension we're checking
       if (currAnimal.measuredDimension === Dimension.HEIGHT) {
         if (
@@ -85,7 +93,8 @@ export default function MainGamePage() {
         }
       } else {
         // currAnimal.measuredDimension === Dimension.WIDTH
-        const currAnimalWidth: number = getWidth(
+        // TODO need to convert into M from px
+        const currAnimalWidth: number = getWidthPx(
           currAnimal.imageAspectRatio,
           currAnimalHeightPx,
         );
@@ -105,6 +114,8 @@ export default function MainGamePage() {
       }
     }
 
+    // if we're down here we are definitely adding an animal
+    let nextAnimalIndex: number = 0;
     if (gameMode === GameMode.DAILY) {
       // daily mode -- pick random that we haven't picked before
 
@@ -137,10 +148,10 @@ export default function MainGamePage() {
         rng() * availableAnimalIndices.length,
       );
 
-      addAnimalIndex(availableAnimalIndices[randomAnimalIndex]);
+      nextAnimalIndex = availableAnimalIndices[randomAnimalIndex];
     } else {
       // we're in infinite mode so just get next index
-      const nextAnimalIndex =
+      nextAnimalIndex =
         animalIndices.length !== 0
           ? animalIndices[animalIndices.length - 1] + 1
           : 0; // if our animalIndices array is zero then just pick the first animal
@@ -158,9 +169,41 @@ export default function MainGamePage() {
         setGameFinishState(GameFinishState.WON);
         return;
       }
-
-      addAnimalIndex(nextAnimalIndex);
     }
+
+    // updating our currently visible animals
+    addAnimalIndex(nextAnimalIndex);
+
+    // check if this animal is the largest we've seen yet
+    const nextAnimalHeight: number = getAnimalHeight(nextAnimalIndex);
+
+    if (largestAnimalHeightIndex === undefined) {
+      // always larger
+      setLargestAnimalHeightIndex(nextAnimalIndex);
+    } else {
+      // need to check
+      const largestAnimalHeight: number = getAnimalHeight(
+        largestAnimalHeightIndex,
+      );
+      if (nextAnimalHeight > largestAnimalHeight) {
+        setLargestAnimalHeightIndex(nextAnimalHeight);
+      }
+    }
+  }
+
+  function getAnimalHeight(animalIndex: number): number {
+    const animal: AnimalMetadata = allAnimals[animalIndex];
+
+    if (animal === undefined) {
+      console.error(
+        "getAnimalHeight got an out of bounds index into allAnimals",
+      );
+      return -1;
+    }
+
+    return animal.measuredDimension === Dimension.HEIGHT
+      ? animal.correctDimensionMeasurement
+      : getWidth(animal.imageAspectRatio, animal.correctDimensionMeasurement);
   }
 
   function changeGameMode(): void {
@@ -194,10 +237,11 @@ export default function MainGamePage() {
         />
       </header>
       <GameContent
+        ref={ref}
         guesses={guesses}
         activeGuessIndex={activeGuessIndex}
         animalIndices={animalIndices}
-        maxHeight={maxHeight}
+        maxHeight={1000}
       />
     </>
   );

@@ -1,7 +1,7 @@
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import type { Sketch, SketchProps } from "@p5-wrapper/react";
 import { useResizeObserver } from "use-resize-observer";
-import getWidth from "./utils/get-width";
+import { getWidth } from "./utils/get-dimensions";
 
 export type ResizableSketchProps<Props extends SketchProps = SketchProps> =
   Props & {

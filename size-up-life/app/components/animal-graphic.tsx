@@ -6,7 +6,7 @@ import { useMemo } from "react";
 import ResizableP5Sketch, {
   type ResizableSketchProps,
 } from "./resizable-p5-sketch";
-import getWidth from "./utils/get-width";
+import { getWidth } from "./utils/get-dimensions";
 
 type AnimalGraphicProps = {
   imagePath: string;
@@ -34,8 +34,12 @@ export default function AnimalGraphic({
       // constants
       const maxHeightPx: number = 1000;
       const maxLerpDiameter: number = 6;
-      const imagePadding: number = 10;
-      
+      // TODO this needs to scale with canvas size
+      const imagePadding: number = 0.1;
+      let animalImagePaddingWidth: number = 50;
+      let animalImagePaddingHeight: number = 50;
+      let canvasPaddingWidth: number = 50
+      let canvasPaddingHeight: number = 50;
 
       let defaultFillColour: p5Types.Color;
       let guessingFillColour: p5Types.Color;
@@ -44,7 +48,6 @@ export default function AnimalGraphic({
       const questionMarkTextPx = 96;
       const questionMarkScale = questionMarkPx / questionMarkTextPx;
       let questionMarkBuffer: p5Types.Graphics;
-      
 
       // the size we have been asked for, written by updateWithProps
       let wantCanvasWidth: number = 50;
@@ -65,6 +68,9 @@ export default function AnimalGraphic({
           maxLerpDiameter,
           wantCanvasHeight / maxHeightPx,
         );
+
+        canvasPaddingHeight = wantCanvasHeight * imagePadding;
+        canvasPaddingWidth = wantCanvasWidth * imagePadding;
 
         p5.resizeCanvas(wantCanvasWidth, wantCanvasHeight);
         return true;
@@ -100,6 +106,11 @@ export default function AnimalGraphic({
 
         animalImage = await p5.loadImage(imagePath);
         animalImage.loadPixels();
+        animalImagePaddingWidth = animalImage.width * imagePadding;
+        animalImagePaddingHeight = animalImage.height * imagePadding;
+
+        canvasPaddingHeight = p5.height * imagePadding;
+        canvasPaddingWidth = p5.width * imagePadding;
 
         isSetup = true;
         tryResizeCanvas();
@@ -166,17 +177,17 @@ export default function AnimalGraphic({
 
             const drawX: number = p5.map(
               x,
-              imagePadding,
-              animalImage.width - imagePadding,
-              imagePadding,
-              p5.width - imagePadding,
+              animalImagePaddingWidth,
+              animalImage.width - animalImagePaddingWidth,
+              canvasPaddingWidth,
+              p5.width - canvasPaddingWidth,
             );
             const drawY: number = p5.map(
               y,
-              imagePadding,
-              animalImage.height - imagePadding,
-              imagePadding,
-              p5.height - imagePadding,
+              animalImagePaddingHeight,
+              animalImage.height - animalImagePaddingHeight,
+              canvasPaddingHeight,
+              p5.height - canvasPaddingHeight,
             );
             const drawDiameter: number =
               diameter *
@@ -222,7 +233,7 @@ export default function AnimalGraphic({
           <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
         </div>
 
-        <div className="col-start-2 row-start-2 h-full w-fit overflow-visible">
+        <div className="col-start-2 row-start-2 h-full w-fit">
           <ResizableP5Sketch
             sketch={sketch}
             sketchProps={{ isGuessing }}
