@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import seedrandom from "seedrandom";
 import { type AnimalMetadata, allAnimals, Dimension } from "../lib/all-animals";
@@ -9,7 +10,6 @@ import SizerSlider from "./sizer-slider";
 import GameState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
 import { getHeight, getWidth } from "./utils/get-dimensions";
-import dynamic from "next/dynamic";
 import WinLossDialogue from "./win-loss-dialogue";
 
 export default function MainGamePage() {
@@ -25,9 +25,7 @@ export default function MainGamePage() {
   const [guesses, setGuesses] = useState<number[]>([newGuessValue]);
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
   const [animalIndices, setAnimalIndices] = useState<number[]>([]);
-  const [gameState, setGameState] = useState<GameState>(
-    GameState.IN_PROGRESS,
-  );
+  const [gameState, setGameState] = useState<GameState>(GameState.IN_PROGRESS);
   const [largestAnimalHeightIndex, setLargestAnimalHeightIndex] = useState<
     number | undefined
   >(undefined);
@@ -64,14 +62,21 @@ export default function MainGamePage() {
     // load up next animal index
     // TODO not using fresh values for gameMode, animalIndices passed in as arguments
     // into this method might be bad
-    if (selectNextAnimal(gameMode, animalIndices, activeGuessIndex) === GameState.IN_PROGRESS) {
+    if (
+      selectNextAnimal(gameMode, animalIndices, activeGuessIndex) ===
+      GameState.IN_PROGRESS
+    ) {
       console.log("yes");
       setActiveGuessIndex(newActiveGuessIndex);
       setGuessesAtIndex(newActiveGuessIndex, newGuessValue);
-    }  
+    }
   }
 
-  function selectNextAnimal(gameMode: GameMode, animalIndices: number[], activeGuessIndex: number): GameState {
+  function selectNextAnimal(
+    gameMode: GameMode,
+    animalIndices: number[],
+    activeGuessIndex: number,
+  ): GameState {
     // checking if you can advance to the next state (i.e. checking our guess is correct)
     // if blank animalIndices don't do this check
     if (animalIndices.length !== 0) {
@@ -248,6 +253,14 @@ export default function MainGamePage() {
     selectNextAnimal(nextGameMode, nextAnimalIndices, 0);
   }
 
+  function resetCurrentGameMode(): void {
+    // clear our animal Indices fully
+    setAnimalIndices([]);
+    setActiveGuessIndex(0);
+
+    selectNextAnimal(gameMode, animalIndices, 0);
+  }
+
   // TODO go into GameContent and have something that fires when activeGuessIndex changes
   //    that checks if we got the guess right or wrong, and then do confetti or failure message
   //    if confetti keep going otherwise don't
@@ -256,11 +269,15 @@ export default function MainGamePage() {
 
   return (
     <>
-      <header inert={gameState !== GameState.IN_PROGRESS} aria-disabled={gameState !== GameState.IN_PROGRESS}>
+      <header
+        inert={gameState !== GameState.IN_PROGRESS}
+        aria-disabled={gameState !== GameState.IN_PROGRESS}
+      >
         <Navbar
           activeGuessIndex={activeGuessIndex}
           gameMode={gameMode}
           changeGameMode={changeGameMode}
+          resetGameMode={resetCurrentGameMode}
         />
         <SizerSlider
           guesses={guesses}
@@ -270,7 +287,13 @@ export default function MainGamePage() {
         />
       </header>
       <main className="h-full flex flex-col overflow-hidden">
-        <WinLossDialogue gameMode={gameMode} isWin={gameState === GameState.WON} isVisible={gameState !== GameState.IN_PROGRESS} streak={activeGuessIndex} setGameState={setGameState}/>
+        <WinLossDialogue
+          gameMode={gameMode}
+          isWin={gameState === GameState.WON}
+          isVisible={gameState !== GameState.IN_PROGRESS}
+          streak={activeGuessIndex}
+          setGameState={setGameState}
+        />
         <GameContent
           isAriaHidden={gameState !== GameState.IN_PROGRESS}
           guesses={guesses}

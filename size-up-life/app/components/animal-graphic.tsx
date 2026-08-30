@@ -16,6 +16,7 @@ type AnimalGraphicProps = {
   animalName: string;
   isGuessing: boolean;
   sketchMToPxHeightModifier: number;
+  scrollTargetRef?: (divElement: HTMLDivElement) => void;
 };
 
 type AnimalSketchProps = {
@@ -30,6 +31,7 @@ export default function AnimalGraphic({
   animalName,
   isGuessing,
   sketchMToPxHeightModifier,
+  scrollTargetRef,
 }: AnimalGraphicProps) {
   const sketch = useMemo<Sketch<ResizableSketchProps<AnimalSketchProps>>>(
     () => (p5) => {
@@ -214,7 +216,7 @@ export default function AnimalGraphic({
   );
 
   return (
-    <figure className="flex flex-col">
+    <figure ref={scrollTargetRef} className="flex flex-col">
       <div className="flex flex-row h-full items-end justify-center">
         {/* vertical measure i.e. height */}
         <div className="h-full flex flex-row items-end justify-center pr-0.5 mb-px">

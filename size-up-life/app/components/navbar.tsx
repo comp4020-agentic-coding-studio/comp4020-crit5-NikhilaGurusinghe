@@ -6,12 +6,14 @@ type NavbarProps = {
   activeGuessIndex: number;
   gameMode: GameMode;
   changeGameMode: () => void;
+  resetGameMode: () => void;
 };
 
 export default function Navbar({
   activeGuessIndex,
   gameMode,
   changeGameMode,
+  resetGameMode,
 }: NavbarProps) {
   const dayOfMonth: number = new Date().getDate();
 
@@ -69,6 +71,7 @@ export default function Navbar({
         </li>
         <li>
           <button
+            onClick={resetGameMode}
             className="cursor-pointer hover:rotate-720 transition-all duration-500 active:scale-70 ease-in-out"
             type="button"
           >
