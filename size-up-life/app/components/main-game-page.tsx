@@ -35,7 +35,6 @@ export default function MainGamePage() {
     selectNextAnimal(GameMode.DAILY, [], 0);
   }, []);
 
-  console.log("animalIndices", animalIndices);
   // selectNextAnimal();
 
   // wrapper for set guesses that makes updating a single element easier
@@ -65,7 +64,6 @@ export default function MainGamePage() {
       selectNextAnimal(gameMode, animalIndices, activeGuessIndex) ===
       GameState.IN_PROGRESS
     ) {
-      console.log("yes");
       setActiveGuessIndex(newActiveGuessIndex);
       setGuessesAtIndex(newActiveGuessIndex, newGuessValue);
     }
@@ -83,7 +81,6 @@ export default function MainGamePage() {
         maxPossibleAnimalHeight * maxHeightMultiplier;
       const currAnimal: AnimalMetadata =
         allAnimals[animalIndices[activeGuessIndex]];
-      console.log(activeGuessIndex);
       const currAnimalCorrectMeasurementPx: number =
         currAnimal.correctDimensionMeasurement * maxHeightMultiplier;
       const guessHeightPx: number = guesses[activeGuessIndex] * mToPxModifier;
@@ -104,18 +101,9 @@ export default function MainGamePage() {
           // if we aren't in the correct guess interval (with tolerance)
           // return immediately and we've lost
           setGameState(GameState.LOST);
-          console.log(
-            "ROUND LOST measurement width",
-            currAnimalCorrectMeasurementPx,
-            "animalpx",
-            guessWidthPx,
-            "guessWidth",
-            guesses[activeGuessIndex],
-            activeGuessIndex,
-          );
+        
           return GameState.LOST;
         }
-        console.log("ROUND WON");
       } else {
         // currAnimal.measuredDimension === Dimension.HEIGHT
         // TODO need to convert into M from px
@@ -128,19 +116,9 @@ export default function MainGamePage() {
         ) {
           // if we aren't in the correct guess interval (with tolerance)
           // return immediately and we've lost
-          setGameState(GameState.LOST);
-          console.log(
-            "ROUND LOST measurement height",
-            currAnimalCorrectMeasurementPx,
-            "animalpx",
-            guessHeightPx,
-            "guessHeight",
-            guesses[activeGuessIndex],
-            activeGuessIndex,
-          );
+         
           return GameState.LOST;
         }
-        console.log("ROUND WON");
       }
     }
 
@@ -186,10 +164,6 @@ export default function MainGamePage() {
           ? animalIndices[animalIndices.length - 1] + 1
           : 0; // if our animalIndices array is zero then just pick the first animal
 
-      console.log("infinite calc", animalIndices.length - 1);
-
-      console.log("infinite", nextAnimalIndex);
-
       // you've gone through all the animals available
       if (nextAnimalIndex > allAnimals.length - 1) {
         // // just wrap around if we're over
@@ -208,7 +182,6 @@ export default function MainGamePage() {
     const nextAnimalHeight: number = getAnimalHeight(nextAnimalIndex);
 
     if (largestAnimalHeightIndex === undefined) {
-      console.log(nextAnimalHeight, "index", nextAnimalIndex);
       // always larger
       setLargestAnimalHeightIndex(nextAnimalIndex);
     } else {

@@ -45,7 +45,6 @@ export default function SizerSlider({
           value={guesses[activeGuessIndex]}
           onChange={(e) => {
             const sliderValue: number = Number(e.target.value);
-            console.log(sliderValue);
             setGuessesAtIndex(activeGuessIndex, sliderValue);
             return;
           }}

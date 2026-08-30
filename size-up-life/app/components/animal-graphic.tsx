@@ -216,7 +216,7 @@ export default function AnimalGraphic({
   );
 
   return (
-    <figure ref={scrollTargetRef} className="flex flex-col">
+    <figure ref={scrollTargetRef} className="flex flex-col mt-10">
       <div className="flex flex-row h-full items-end justify-center">
         {/* vertical measure i.e. height */}
         <div className="h-full flex flex-row items-end justify-center pr-0.5 mb-px">
@@ -261,7 +261,7 @@ export default function AnimalGraphic({
       </div>
 
       <figcaption
-        className="text-2xl font-semibold contain-inline-size ml-6 mt-4 md:mt-8 whitespace-nowrap"
+        className="text-2xl font-semibold contain-inline-size ml-6 mt-4 md:mt-5 whitespace-nowrap"
         title={animalName}
       >
         {animalName}
