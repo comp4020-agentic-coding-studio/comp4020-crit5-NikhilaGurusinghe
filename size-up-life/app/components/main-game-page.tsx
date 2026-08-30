@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import seedrandom from "seedrandom";
 import { type AnimalMetadata, allAnimals, Dimension } from "../lib/all-animals";
@@ -31,9 +30,9 @@ export default function MainGamePage() {
   >(undefined);
 
   // add an animal on mount to the animalIndices array (do this only once)
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Intentionally run only once when the component mounts.
   useEffect(() => {
-    console.log("use effect");
-    selectNextAnimal(gameMode, animalIndices, activeGuessIndex);
+    selectNextAnimal(GameMode.DAILY, [], 0);
   }, []);
 
   console.log("animalIndices", animalIndices);

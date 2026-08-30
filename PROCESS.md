@@ -21,7 +21,7 @@ One paragraph: the thing, and the idea behind it.
 
 ## The moments that mattered
 
-* how do typescript generics work??
+* how do typescript generics work?? test
 
 Three or four for an assignment; fewer is fine for a weekly prototype. Keep the
 list short so each moment has room to do all four jobs:
