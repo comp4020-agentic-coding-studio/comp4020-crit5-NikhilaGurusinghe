@@ -36,7 +36,7 @@ export default function AnimalGraphic({
   const sketch = useMemo<Sketch<ResizableSketchProps<AnimalSketchProps>>>(
     () => (p5) => {
       // constants
-      const maxHeightPx: number = 1000;
+      const maxHeightPx: number = 2000;
       const maxLerpDiameter: number = 6;
       // TODO this needs to scale with canvas size
       const imagePadding: number = 0.1;
@@ -203,7 +203,15 @@ export default function AnimalGraphic({
 
             if (currentIsGuessing) {
               const glyphSize: number = drawDiameter * 3 * questionMarkScale;
-              p5.image(questionMarkBuffer, drawX, drawY, glyphSize, glyphSize);
+              if (glyphSize > 0) {
+                p5.image(
+                  questionMarkBuffer,
+                  drawX,
+                  drawY,
+                  glyphSize,
+                  glyphSize,
+                );
+              }
             } else {
               p5.circle(drawX, drawY, drawDiameter);
             }

@@ -6,9 +6,10 @@ import { type AnimalMetadata, allAnimals, Dimension } from "../lib/all-animals";
 import GameContent from "./game-content";
 import Navbar from "./navbar";
 import SizerSlider from "./sizer-slider";
+import { isGuessCorrect } from "./utils/check-guess";
 import GameState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
-import { getHeight, getWidth } from "./utils/get-dimensions";
+import { getHeight } from "./utils/get-dimensions";
 import WinLossDialogue from "./win-loss-dialogue";
 
 export default function MainGamePage() {
@@ -17,7 +18,7 @@ export default function MainGamePage() {
   const guessToleranceM: number = 0.5;
   // TODO to make this larger you're going to have to get smarter as at numbers larger than
   // this the p5 canvas takes up too much memory and crashes the site
-  const maxHeightMultiplier: number = 100;
+  const maxHeightMultiplier: number = 150;
   const maxPossibleAnimalHeight: number = 15;
 
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
@@ -77,48 +78,30 @@ export default function MainGamePage() {
     // checking if you can advance to the next state (i.e. checking our guess is correct)
     // if blank animalIndices don't do this check
     if (animalIndices.length !== 0) {
-      const mToPxModifier: number =
-        maxPossibleAnimalHeight * maxHeightMultiplier;
       const currAnimal: AnimalMetadata =
         allAnimals[animalIndices[activeGuessIndex]];
-      const currAnimalCorrectMeasurementPx: number =
-        currAnimal.correctDimensionMeasurement * maxHeightMultiplier;
-      const guessHeightPx: number = guesses[activeGuessIndex] * mToPxModifier;
-      const guessTolerancePx: number = guessToleranceM * maxHeightMultiplier;
-      // we need to calculate based on which dimension we're checking
-      if (currAnimal.measuredDimension === Dimension.WIDTH) {
-        // need to get the guessHeightPx here as we are comparing currAnimal.height with guessHeightPx
-        const guessWidthPx: number = getWidth(
-          currAnimal.imageAspectRatio,
-          guessHeightPx,
-        );
-        if (
-          !(
-            currAnimalCorrectMeasurementPx >= guessWidthPx - guessTolerancePx &&
-            currAnimalCorrectMeasurementPx <= guessWidthPx + guessTolerancePx
-          )
-        ) {
-          // if we aren't in the correct guess interval (with tolerance)
-          // return immediately and we've lost
-          setGameState(GameState.LOST);
-        
-          return GameState.LOST;
-        }
-      } else {
-        // currAnimal.measuredDimension === Dimension.HEIGHT
-        // TODO need to convert into M from px
-        if (
-          !(
-            currAnimalCorrectMeasurementPx >=
-              guessHeightPx - guessTolerancePx &&
-            currAnimalCorrectMeasurementPx <= guessHeightPx + guessTolerancePx
-          )
-        ) {
-          // if we aren't in the correct guess interval (with tolerance)
-          // return immediately and we've lost
-         
-          return GameState.LOST;
-        }
+
+      // the slider is a fraction of the tallest animal the canvas can draw,
+      // so turn it into metres before the rule sees it
+      const guessHeightM: number =
+        guesses[activeGuessIndex] * maxPossibleAnimalHeight;
+
+      // one path for both dimensions. It used to be two branches, and only
+      // the width one told the rest of the game you'd lost --- missing a
+      // height animal just silently did nothing.
+      if (
+        !isGuessCorrect({
+          measuresWidth: currAnimal.measuredDimension === Dimension.WIDTH,
+          imageAspectRatio: currAnimal.imageAspectRatio,
+          correctMeasurementM: currAnimal.correctDimensionMeasurement,
+          guessHeightM,
+          toleranceM: guessToleranceM,
+          pxPerM: maxHeightMultiplier,
+        })
+      ) {
+        setGameState(GameState.LOST);
+
+        return GameState.LOST;
       }
     }
 
@@ -138,9 +121,9 @@ export default function MainGamePage() {
       // get random seed based on day/month/year
       const dateNow: Date = new Date();
       const rng: seedrandom.PRNG = seedrandom(
-        dateNow.getUTCFullYear.toString() +
-          dateNow.getUTCMonth.toString() +
-          dateNow.getUTCDate.toString(),
+        `${dateNow.getUTCFullYear().toString()}-${dateNow
+          .getUTCMonth()
+          .toString()}-${dateNow.getUTCDate().toString()}`,
       );
 
       const animalIndicesSet = new Set(animalIndices);
