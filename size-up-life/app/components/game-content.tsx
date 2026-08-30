@@ -44,7 +44,7 @@ export default function GameContent({
           imagePath={`${basePath}/images/person.png`}
           imageAltText="A person"
           sketchHeightPx={1.85 * heightMtoPxModifier}
-          sketchAspectRatio="188 / 816"
+          sketchAspectRatio="720 / 2613"
           animalName="Person"
           isGuessing={false}
           sketchMToPxHeightModifier={heightMtoPxModifier}

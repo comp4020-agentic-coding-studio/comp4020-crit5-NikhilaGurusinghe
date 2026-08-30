@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import seedrandom from "seedrandom";
 import { type AnimalMetadata, allAnimals, Dimension } from "../lib/all-animals";
 import GameContent from "./game-content";
 import Navbar from "./navbar";
 import SizerSlider from "./sizer-slider";
 import { isGuessCorrect } from "./utils/check-guess";
+import { dailySeed, shuffledIndices } from "./utils/daily-shuffle";
 import GameState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
 import { getHeight } from "./utils/get-dimensions";
@@ -61,9 +61,11 @@ export default function MainGamePage() {
     // load up next animal index
     // TODO not using fresh values for gameMode, animalIndices passed in as arguments
     // into this method might be bad
+
+    const nextAnimalResult: GameState = selectNextAnimal(gameMode, animalIndices, activeGuessIndex);
+
     if (
-      selectNextAnimal(gameMode, animalIndices, activeGuessIndex) ===
-      GameState.IN_PROGRESS
+      nextAnimalResult === GameState.IN_PROGRESS || nextAnimalResult === GameState.WON
     ) {
       setActiveGuessIndex(newActiveGuessIndex);
       setGuessesAtIndex(newActiveGuessIndex, newGuessValue);
@@ -110,36 +112,24 @@ export default function MainGamePage() {
     if (gameMode === GameMode.DAILY) {
       // daily mode -- pick random that we haven't picked before
 
-      // you've done the daily amount of animals you need to do
-      // so you win
-      if (animalIndices.length >= dailyAnimalsLimit) {
+      // today's animals, based on rng seeded on today's utc date
+      const dailyOrder: number[] = shuffledIndices(
+        allAnimals.length,
+        dailySeed(new Date()),
+      );
+
+      // you've done the daily amount of animals you need to do, or run out of
+      // animals to give you, so you win
+      if (
+        animalIndices.length >= Math.min(dailyAnimalsLimit, dailyOrder.length)
+      ) {
         // you won!
         setGameState(GameState.WON);
         return GameState.WON;
       }
 
-      // get random seed based on day/month/year
-      const dateNow: Date = new Date();
-      const rng: seedrandom.PRNG = seedrandom(
-        `${dateNow.getUTCFullYear().toString()}-${dateNow
-          .getUTCMonth()
-          .toString()}-${dateNow.getUTCDate().toString()}`,
-      );
-
-      const animalIndicesSet = new Set(animalIndices);
-      const availableAnimalIndices = allAnimals
-        .map((_, index: number) => index)
-        .filter((index: number) => !animalIndicesSet.has(index));
-
-      if (availableAnimalIndices.length === 0) {
-        console.error("selectNextAnimal failed to find a new animal");
-      }
-
-      const randomAnimalIndex = Math.floor(
-        rng() * availableAnimalIndices.length,
-      );
-
-      nextAnimalIndex = availableAnimalIndices[randomAnimalIndex];
+      // the shuffle already guarantees no repeats, so just walk it
+      nextAnimalIndex = dailyOrder[animalIndices.length];
     } else {
       // we're in infinite mode so just get next index
       nextAnimalIndex =
@@ -235,6 +225,7 @@ export default function MainGamePage() {
           gameMode={gameMode}
           changeGameMode={changeGameMode}
           resetGameMode={resetCurrentGameMode}
+          maxDailyStreak={dailyAnimalsLimit}
         />
         <SizerSlider
           guesses={guesses}

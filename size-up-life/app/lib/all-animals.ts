@@ -29,18 +29,25 @@ export const allAnimals: AnimalMetadata[] = [
     correctDimensionMeasurement: 12,
   },
   {
-    imagePath: `${basePath}/images/velociraptor.png`,
-    imageAspectRatio: "906 / 579",
-    animalName: "Velociraptor",
-    measuredDimension: Dimension.WIDTH,
-    correctDimensionMeasurement: 1.75,
-  },
-  {
     imagePath: `${basePath}/images/grizzly-bear.png`,
     imageAspectRatio: "1083 / 767",
     animalName: "Grizzly Bear",
     measuredDimension: Dimension.WIDTH,
     correctDimensionMeasurement: 2.2,
+  },
+  {
+    imagePath: `${basePath}/images/giraffe.png`,
+    imageAspectRatio: "867 / 923",
+    animalName: "Giraffe",
+    measuredDimension: Dimension.HEIGHT,
+    correctDimensionMeasurement: 5,
+  },
+  {
+    imagePath: `${basePath}/images/velociraptor.png`,
+    imageAspectRatio: "906 / 579",
+    animalName: "Velociraptor",
+    measuredDimension: Dimension.WIDTH,
+    correctDimensionMeasurement: 1.75,
   },
   {
     imagePath: `${basePath}/images/elephant.png`,
@@ -55,5 +62,12 @@ export const allAnimals: AnimalMetadata[] = [
     animalName: "Lion",
     measuredDimension: Dimension.WIDTH,
     correctDimensionMeasurement: 1.9,
+  },
+  {
+    imagePath: `${basePath}/images/dreadnoughtus.png`,
+    imageAspectRatio: "748 / 409",
+    animalName: "Dreadnoughtus",
+    measuredDimension: Dimension.WIDTH,
+    correctDimensionMeasurement: 26,
   },
 ];
