@@ -4,7 +4,6 @@ import { allAnimals } from "../lib/all-animals";
 import AnimalGraphic from "./animal-graphic";
 
 type GameContentProps = {
-  ref: RefCallback<HTMLDivElement>;
   guesses: number[];
   activeGuessIndex: number;
   animalIndices: number[];
@@ -13,7 +12,6 @@ type GameContentProps = {
 };
 
 export default function GameContent({
-  ref,
   guesses,
   activeGuessIndex,
   animalIndices,
@@ -23,7 +21,6 @@ export default function GameContent({
   return (
     <main className="flex h-full min-h-0 flex-col overflow-x-auto overflow-y-auto">
       <div
-        ref={ref}
         className="flex flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25"
       >
         <AnimalGraphic

@@ -9,7 +9,7 @@ import Navbar from "./navbar";
 import SizerSlider from "./sizer-slider";
 import GameFinishState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
-import { convertMToPx, getHeight, getWidth } from "./utils/get-dimensions";
+import { getHeight, getWidth } from "./utils/get-dimensions";
 
 export default function MainGamePage() {
   const newGuessValue: number = 0.2;
@@ -30,13 +30,6 @@ export default function MainGamePage() {
   const [largestAnimalHeightIndex, setLargestAnimalHeightIndex] = useState<
     number | undefined
   >(undefined);
-  const {
-    ref,
-    width = 500, // okay default values TODO do we need this width or can we use
-    height = 500,
-  } = useResizeObserver<HTMLDivElement>();
-  
-
 
   // add an animal on mount to the animalIndices array (do this only once)
   useEffect(() => {
@@ -77,33 +70,43 @@ export default function MainGamePage() {
   function selectNextAnimal(gameMode: GameMode, animalIndices: number[]): void {
     // checking if you can advance to the next state (i.e. checking our guess is correct)
     // if blank animalIndices don't do this check
-    // TODO rejig guessHeightPx and guessWidthPx
     if (animalIndices.length !== 0) {
-      const mToPxModifier: number = maxPossibleAnimalHeight * maxHeightMultiplier;
+      const mToPxModifier: number =
+        maxPossibleAnimalHeight * maxHeightMultiplier;
       const currAnimal: AnimalMetadata =
         allAnimals[animalIndices[activeGuessIndex]];
-      const currAnimalCorrectMeasurementPx: number = currAnimal.correctDimensionMeasurement * maxHeightMultiplier;
+      const currAnimalCorrectMeasurementPx: number =
+        currAnimal.correctDimensionMeasurement * maxHeightMultiplier;
       const guessHeightPx: number = guesses[activeGuessIndex] * mToPxModifier;
       const guessTolerancePx: number = guessToleranceM * maxHeightMultiplier;
       // we need to calculate based on which dimension we're checking
       if (currAnimal.measuredDimension === Dimension.WIDTH) {
         // need to get the guessHeightPx here as we are comparing currAnimal.height with guessHeightPx
-        const guessWidthPx: number = getWidth(currAnimal.imageAspectRatio, guessHeightPx);
+        const guessWidthPx: number = getWidth(
+          currAnimal.imageAspectRatio,
+          guessHeightPx,
+        );
         if (
           !(
-            currAnimalCorrectMeasurementPx >=
-            guessWidthPx - guessTolerancePx &&
-              currAnimalCorrectMeasurementPx <=
-              guessWidthPx + guessTolerancePx
+            currAnimalCorrectMeasurementPx >= guessWidthPx - guessTolerancePx &&
+            currAnimalCorrectMeasurementPx <= guessWidthPx + guessTolerancePx
           )
         ) {
           // if we aren't in the correct guess interval (with tolerance)
           // return immediately and we've lost
           setGameFinishState(GameFinishState.LOST);
-        console.log("ROUND LOST measurement width", currAnimalCorrectMeasurementPx, "animalpx", guessWidthPx, "guessWidth", guesses[activeGuessIndex], activeGuessIndex)
-        return;
+          console.log(
+            "ROUND LOST measurement width",
+            currAnimalCorrectMeasurementPx,
+            "animalpx",
+            guessWidthPx,
+            "guessWidth",
+            guesses[activeGuessIndex],
+            activeGuessIndex,
+          );
+          return;
         }
-        console.log("ROUND WON")
+        console.log("ROUND WON");
       } else {
         // currAnimal.measuredDimension === Dimension.HEIGHT
         // TODO need to convert into M from px
@@ -111,18 +114,24 @@ export default function MainGamePage() {
           !(
             currAnimalCorrectMeasurementPx >=
               guessHeightPx - guessTolerancePx &&
-              currAnimalCorrectMeasurementPx <=
-              guessHeightPx + guessTolerancePx
+            currAnimalCorrectMeasurementPx <= guessHeightPx + guessTolerancePx
           )
         ) {
           // if we aren't in the correct guess interval (with tolerance)
           // return immediately and we've lost
           setGameFinishState(GameFinishState.LOST);
-          console.log("ROUND LOST measurement height", currAnimalCorrectMeasurementPx, "animalpx", guessHeightPx, "guessHeight", guesses[activeGuessIndex], activeGuessIndex)
+          console.log(
+            "ROUND LOST measurement height",
+            currAnimalCorrectMeasurementPx,
+            "animalpx",
+            guessHeightPx,
+            "guessHeight",
+            guesses[activeGuessIndex],
+            activeGuessIndex,
+          );
           return;
         }
-        console.log("ROUND WON")
-
+        console.log("ROUND WON");
       }
     }
 
@@ -253,7 +262,6 @@ export default function MainGamePage() {
         />
       </header>
       <GameContent
-        ref={ref}
         guesses={guesses}
         activeGuessIndex={activeGuessIndex}
         animalIndices={animalIndices}
