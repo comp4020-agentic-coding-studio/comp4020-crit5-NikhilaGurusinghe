@@ -26,7 +26,7 @@ export default function SizerSlider({
           onClick={() => {
             const newSliderValue: number = Math.min(
               sliderMaxValue,
-              guesses[activeGuessIndex] + sliderStepSize,
+              guesses[activeGuessIndex] + sliderStepSize / 2,
             );
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;
@@ -57,7 +57,7 @@ export default function SizerSlider({
           onClick={() => {
             const newSliderValue: number = Math.max(
               sliderMinValue,
-              guesses[activeGuessIndex] - sliderStepSize,
+              guesses[activeGuessIndex] - sliderStepSize / 2,
             );
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;

@@ -18,7 +18,7 @@ export default function GameContent({
   heightMtoPxModifier,
 }: GameContentProps) {
   return (
-    <main className="flex h-full min-h-0 flex-col overflow-x-auto overflow-y-auto">
+    <div className="flex h-full min-h-0 flex-col overflow-x-auto overflow-y-auto">
       <div className="flex flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25">
         <AnimalGraphic
           imagePath={`${basePath}/images/person.png`}
@@ -43,6 +43,6 @@ export default function GameContent({
           />
         ))}
       </div>
-    </main>
+    </div>
   );
 }
