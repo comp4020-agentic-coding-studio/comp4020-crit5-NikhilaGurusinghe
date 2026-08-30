@@ -239,12 +239,12 @@ export default function AnimalGraphic({
         </div>
 
         {/* horizontal measure i.e. width */}
-        <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
-          {/* <span className="mb-[1.5px] md:mb-0.5">
+        {/* <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
+          <span className="mb-[1.5px] md:mb-0.5">
             {(getWidth(sketchAspectRatio, sketchHeightPx)/sketchMToPxHeightModifier).toFixed(2)} m
-          </span> */}
+          </span>
           <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
-        </div>
+        </div> */}
 
         <div className="col-start-2 row-start-2 h-full w-fit">
           <ResizableP5Sketch
