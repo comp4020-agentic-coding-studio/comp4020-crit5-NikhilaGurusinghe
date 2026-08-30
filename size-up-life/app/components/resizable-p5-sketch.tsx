@@ -13,6 +13,7 @@ interface ResizableP5Props<Props extends SketchProps = SketchProps> {
   sketch: Sketch<ResizableSketchProps<Props>>;
   sketchProps?: Props;
   sketchHeightPx: number;
+  sketchWidthPx: number;
   sketchAspectRatio: string;
   sketchAltText: string;
 }
@@ -23,6 +24,7 @@ export default function ResizableP5Sketch<
   sketch,
   sketchProps,
   sketchHeightPx,
+  sketchWidthPx,
   sketchAspectRatio,
   sketchAltText,
 }: ResizableP5Props<Props>) {
@@ -42,10 +44,10 @@ export default function ResizableP5Sketch<
   return (
     <div
       ref={ref}
-      className="flex-none"
+      className="flex-none relative"
       style={{
         height: `${sketchHeightPx}px`,
-        width: `${getWidth(sketchAspectRatio, sketchHeightPx)}px`,
+        width: `${sketchWidthPx}px`,
       }}
       aria-label={sketchAltText}
       role="img"

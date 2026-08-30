@@ -13,7 +13,7 @@ import { convertMToPx, getHeight, getWidth } from "./utils/get-dimensions";
 
 export default function MainGamePage() {
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
-  const [guesses, setGuesses] = useState<number[]>([0.5]);
+  const [guesses, setGuesses] = useState<number[]>([0.2]);
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
   const [animalIndices, setAnimalIndices] = useState<number[]>([]);
   const [gameFinishState, setGameFinishState] = useState<GameFinishState>(
@@ -26,7 +26,7 @@ export default function MainGamePage() {
   >(undefined);
   const {
     ref,
-    width = 500, // okay default values TODO do we need this width or can we use 
+    width = 500, // okay default values TODO do we need this width or can we use
     height = 500,
   } = useResizeObserver<HTMLDivElement>();
   const guessTolerance: number = 10;
@@ -178,7 +178,7 @@ export default function MainGamePage() {
     const nextAnimalHeight: number = getAnimalHeight(nextAnimalIndex);
 
     if (largestAnimalHeightIndex === undefined) {
-      console.log(nextAnimalHeight, "index", nextAnimalIndex)
+      console.log(nextAnimalHeight, "index", nextAnimalIndex);
       // always larger
       setLargestAnimalHeightIndex(nextAnimalIndex);
     } else {
@@ -234,6 +234,7 @@ export default function MainGamePage() {
           changeGameMode={changeGameMode}
         />
         <SizerSlider
+          guesses={guesses}
           setGuessesAtIndex={setGuessesAtIndex}
           activeGuessIndex={activeGuessIndex}
           goToNextGuess={goToNextGuess}
@@ -244,7 +245,7 @@ export default function MainGamePage() {
         guesses={guesses}
         activeGuessIndex={activeGuessIndex}
         animalIndices={animalIndices}
-        maxHeight={(largestAnimalHeightIndex === undefined ? 30 : getAnimalHeight(largestAnimalHeightIndex)) * maxHeightMultiplier}
+        maxHeight={15 * maxHeightMultiplier}
         heightMtoPxModifier={maxHeightMultiplier}
       />
     </>

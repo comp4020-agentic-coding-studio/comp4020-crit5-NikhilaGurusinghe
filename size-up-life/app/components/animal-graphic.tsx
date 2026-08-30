@@ -40,7 +40,7 @@ export default function AnimalGraphic({
       const imagePadding: number = 0.1;
       let animalImagePaddingWidth: number = 50;
       let animalImagePaddingHeight: number = 50;
-      let canvasPaddingWidth: number = 50
+      let canvasPaddingWidth: number = 50;
       let canvasPaddingHeight: number = 50;
 
       let defaultFillColour: p5Types.Color;
@@ -138,7 +138,7 @@ export default function AnimalGraphic({
 
       p5.draw = () => {
         if (animalImage === undefined) return;
-        p5.background(255);
+        p5.clear();
 
         const sampleResolution = 5;
 
@@ -217,21 +217,32 @@ export default function AnimalGraphic({
     <figure className="flex flex-col">
       <div className="inline-grid grid-cols-[auto_max-content] grid-rows-[auto_max-content]">
         {/* vertical measure i.e. height */}
-        <div className="col-start-1 row-start-2 h-full flex flex-row items-center justify-center">
+        <div className="col-start-1 row-start-2 h-full flex flex-row items-end justify-center">
           <span
             className="mr-px md:mr-0.5 [writing-mode:vertical-lr] -scale-y-100 -scale-x-100"
             style={{ textOrientation: "sideways" }}
           >
-            {(sketchHeightPx/sketchMToPxHeightModifier).toFixed(2)} m
+            <span className="font-semibold">
+              {(sketchHeightPx / sketchMToPxHeightModifier).toFixed(2)}m
+            </span>{" "}
+            <span className="text-sm">(tall)</span> ×{" "}
+            <span className="font-semibold">
+              {(
+                getWidth(sketchAspectRatio, sketchHeightPx) /
+                sketchMToPxHeightModifier
+              ).toFixed(2)}
+              m
+            </span>{" "}
+            <span className="text-xs">(wide)</span>
           </span>
           <div className="relative border-l-2 pl-3 h-full rounded-xs before:absolute before:top-0 before:left-0 before:h-0.5 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
         </div>
 
         {/* horizontal measure i.e. width */}
         <div className="col-start-2 row-start-1 w-full flex flex-col items-center justify-center">
-          <span className="mb-[1.5px] md:mb-0.5">
+          {/* <span className="mb-[1.5px] md:mb-0.5">
             {(getWidth(sketchAspectRatio, sketchHeightPx)/sketchMToPxHeightModifier).toFixed(2)} m
-          </span>
+          </span> */}
           <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
         </div>
 
@@ -241,6 +252,7 @@ export default function AnimalGraphic({
             sketchProps={{ isGuessing }}
             sketchAltText={imageAltText}
             sketchHeightPx={sketchHeightPx}
+            sketchWidthPx={getWidth(sketchAspectRatio, sketchHeightPx)}
             sketchAspectRatio={sketchAspectRatio}
           />
         </div>

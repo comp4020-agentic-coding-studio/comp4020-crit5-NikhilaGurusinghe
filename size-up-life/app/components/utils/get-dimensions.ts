@@ -5,13 +5,13 @@ function stringAspectRatioToNumbers(aspectRatio: string): number[] {
 
 export function getWidth(aspectRatio: string, height: number): number {
   const [numerator, denominator] = stringAspectRatioToNumbers(aspectRatio);
+  console.log("widthget", Math.round(height * (numerator / denominator)));
 
   return Math.round(height * (numerator / denominator));
 }
 
 export function getHeight(aspectRatio: string, width: number): number {
   const [numerator, denominator] = stringAspectRatioToNumbers(aspectRatio);
-  console.log("heightget",Math.round(width * (denominator / numerator)) )
 
   return Math.round(width * (denominator / numerator));
 }

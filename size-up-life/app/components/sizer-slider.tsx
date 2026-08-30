@@ -1,18 +1,19 @@
 import { useState } from "react";
 
 type SizerSliderProps = {
+  guesses: number[];
   setGuessesAtIndex: (index: number, guess: number) => void;
   activeGuessIndex: number;
   goToNextGuess: () => void;
 };
 
 export default function SizerSlider({
+  guesses,
   setGuessesAtIndex,
   activeGuessIndex,
   goToNextGuess,
 }: SizerSliderProps) {
   const sliderStepSize: number = 0.01;
-  const [sliderValue, setSliderValue] = useState<number>(0.5);
   const sliderMaxValue: number = 1;
   const sliderMinValue: number = 0.1;
 
@@ -27,9 +28,8 @@ export default function SizerSlider({
           onClick={() => {
             const newSliderValue: number = Math.min(
               sliderMaxValue,
-              sliderValue + sliderStepSize,
+              guesses[activeGuessIndex] + sliderStepSize,
             );
-            setSliderValue(newSliderValue);
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;
           }}
@@ -44,10 +44,10 @@ export default function SizerSlider({
           min={sliderMinValue}
           max={sliderMaxValue}
           step={sliderStepSize}
-          value={sliderValue}
+          value={guesses[activeGuessIndex]}
           onChange={(e) => {
             const sliderValue: number = Number(e.target.value);
-            setSliderValue(sliderValue);
+            console.log(sliderValue);
             setGuessesAtIndex(activeGuessIndex, sliderValue);
             return;
           }}
@@ -59,9 +59,8 @@ export default function SizerSlider({
           onClick={() => {
             const newSliderValue: number = Math.max(
               sliderMinValue,
-              sliderValue - sliderStepSize,
+              guesses[activeGuessIndex] - sliderStepSize,
             );
-            setSliderValue(newSliderValue);
             setGuessesAtIndex(activeGuessIndex, newSliderValue);
             return;
           }}
