@@ -49,7 +49,7 @@ export default function SizerSlider({
             setGuessesAtIndex(activeGuessIndex, sliderValue);
             return;
           }}
-          orient="vertical"
+          {...{ orient: "vertical" }}
           style={{ direction: "rtl" }}
         />
         <button
