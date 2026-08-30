@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 type SizerSliderProps = {
   guesses: number[];
   setGuessesAtIndex: (index: number, guess: number) => void;

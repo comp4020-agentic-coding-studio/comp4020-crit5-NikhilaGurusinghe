@@ -1,7 +1,6 @@
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import type { Sketch, SketchProps } from "@p5-wrapper/react";
 import { useResizeObserver } from "use-resize-observer";
-import { getWidth } from "./utils/get-dimensions";
 
 export type ResizableSketchProps<Props extends SketchProps = SketchProps> =
   Props & {
@@ -25,7 +24,6 @@ export default function ResizableP5Sketch<
   sketchProps,
   sketchHeightPx,
   sketchWidthPx,
-  sketchAspectRatio,
   sketchAltText,
 }: ResizableP5Props<Props>) {
   // used initially to set the p5 canvas size

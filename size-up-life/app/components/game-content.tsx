@@ -1,4 +1,3 @@
-import type { RefCallback } from "react";
 import { basePath } from "@/lib/base-path";
 import { allAnimals } from "../lib/all-animals";
 import AnimalGraphic from "./animal-graphic";
@@ -20,9 +19,7 @@ export default function GameContent({
 }: GameContentProps) {
   return (
     <main className="flex h-full min-h-0 flex-col overflow-x-auto overflow-y-auto">
-      <div
-        className="flex flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25"
-      >
+      <div className="flex flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25">
         <AnimalGraphic
           imagePath={`${basePath}/images/person.png`}
           imageAltText="A person"
