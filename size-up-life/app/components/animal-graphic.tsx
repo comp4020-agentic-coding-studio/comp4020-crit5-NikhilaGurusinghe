@@ -34,12 +34,17 @@ export default function AnimalGraphic({
       // constants
       const maxHeightPx: number = 1000;
       const maxLerpDiameter: number = 6;
+      const imagePadding: number = 10;
+      
+
       let defaultFillColour: p5Types.Color;
       let guessingFillColour: p5Types.Color;
-      const GLYPH_BUFFER_PX = 128;
-      const GLYPH_TEXT_PX = 96;
-      const GLYPH_SCALE = GLYPH_BUFFER_PX / GLYPH_TEXT_PX;
-      let guessGlyph: p5Types.Graphics;
+
+      const questionMarkPx = 128;
+      const questionMarkTextPx = 96;
+      const questionMarkScale = questionMarkPx / questionMarkTextPx;
+      let questionMarkBuffer: p5Types.Graphics;
+      
 
       // the size we have been asked for, written by updateWithProps
       let wantCanvasWidth: number = 50;
@@ -48,7 +53,6 @@ export default function AnimalGraphic({
       let animalImage: p5Types.Image | undefined;
       let halfToneDiameterScale: number = 2;
       let currentIsGuessing: boolean = false;
-
 
       let isSetup: boolean = false;
 
@@ -73,15 +77,15 @@ export default function AnimalGraphic({
         guessingFillColour = p5.color("#50a2ff");
 
         // caching "?" mark and sampling from this so we don't have to render the letterform everytime
-        guessGlyph = p5.createGraphics(GLYPH_BUFFER_PX, GLYPH_BUFFER_PX);
-        guessGlyph.pixelDensity(1); 
-        guessGlyph.clear();
-        guessGlyph.noStroke();
-        guessGlyph.fill(guessingFillColour);
-        guessGlyph.textAlign(p5.CENTER, p5.CENTER);
-        guessGlyph.textStyle(p5.BOLD);
-        guessGlyph.textSize(GLYPH_TEXT_PX);
-        guessGlyph.text("?", GLYPH_BUFFER_PX / 2, GLYPH_BUFFER_PX / 2);
+        questionMarkBuffer = p5.createGraphics(questionMarkPx, questionMarkPx);
+        questionMarkBuffer.pixelDensity(1);
+        questionMarkBuffer.clear();
+        questionMarkBuffer.noStroke();
+        questionMarkBuffer.fill(guessingFillColour);
+        questionMarkBuffer.textAlign(p5.CENTER, p5.CENTER);
+        questionMarkBuffer.textStyle(p5.BOLD);
+        questionMarkBuffer.textSize(questionMarkTextPx);
+        questionMarkBuffer.text("??", questionMarkPx / 2, questionMarkPx / 2);
 
         halfToneDiameterScale = p5.lerp(
           1,
@@ -96,7 +100,7 @@ export default function AnimalGraphic({
 
         animalImage = await p5.loadImage(imagePath);
         animalImage.loadPixels();
-  
+
         isSetup = true;
         tryResizeCanvas();
       };
@@ -114,7 +118,8 @@ export default function AnimalGraphic({
 
         const resized: boolean = tryResizeCanvas();
 
-        // changing when isGuessing has changed
+        // changing when isGuessing has changed and we haven't redrawn due to
+        // canvas resizing
         if (guessingChanged && !resized) p5.redraw();
       };
 
@@ -133,11 +138,7 @@ export default function AnimalGraphic({
         }
 
         // halftoning - https://editor.p5js.org/chrsgrbr/sketches/mLNDLCYys
-        for (
-          let x: number = 0;
-          x < animalImage.width;
-          x += sampleResolution
-        ) {
+        for (let x: number = 0; x < animalImage.width; x += sampleResolution) {
           for (
             let y: number = 0;
             y < animalImage.height;
@@ -165,17 +166,17 @@ export default function AnimalGraphic({
 
             const drawX: number = p5.map(
               x,
-              0,
-              animalImage.width,
-              0,
-              p5.width + 10,
+              imagePadding,
+              animalImage.width - imagePadding,
+              imagePadding,
+              p5.width - imagePadding,
             );
             const drawY: number = p5.map(
               y,
-              0,
-              animalImage.height,
-              0,
-              p5.height + 10,
+              imagePadding,
+              animalImage.height - imagePadding,
+              imagePadding,
+              p5.height - imagePadding,
             );
             const drawDiameter: number =
               diameter *
@@ -186,8 +187,8 @@ export default function AnimalGraphic({
             p5.noStroke();
 
             if (currentIsGuessing) {
-              const glyphSize: number = drawDiameter * 3 * GLYPH_SCALE;
-              p5.image(guessGlyph, drawX, drawY, glyphSize, glyphSize);
+              const glyphSize: number = drawDiameter * 3 * questionMarkScale;
+              p5.image(questionMarkBuffer, drawX, drawY, glyphSize, glyphSize);
             } else {
               p5.circle(drawX, drawY, drawDiameter);
             }
@@ -208,7 +209,7 @@ export default function AnimalGraphic({
             className="mr-px md:mr-0.5 [writing-mode:vertical-lr] -scale-y-100 -scale-x-100"
             style={{ textOrientation: "sideways" }}
           >
-            {sketchHeightPx} m
+            {Math.round(sketchHeightPx)} m
           </span>
           <div className="relative border-l-2 pl-3 h-full rounded-xs before:absolute before:top-0 before:left-0 before:h-0.5 before:bg-black before:w-2 before:content-[''] before:rounded-r-2xl after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-black after:w-2 after:content-[''] after:rounded-r-2xl" />
         </div>
@@ -221,7 +222,7 @@ export default function AnimalGraphic({
           <div className="relative border-t-2 pb-5 w-full rounded-xs before:absolute before:top-0 before:left-0 before:w-0.5 before:bg-black before:h-3 before:content-[''] before:rounded-b-2xl after:absolute after:top-0 after:left-full after:-translate-x-full after:w-0.5 after:bg-black after:h-3 after:content-[''] after:rounded-b-2xl" />
         </div>
 
-        <div className="col-start-2 row-start-2 h-full w-fit overflow-clip">
+        <div className="col-start-2 row-start-2 h-full w-fit overflow-visible">
           <ResizableP5Sketch
             sketch={sketch}
             sketchProps={{ isGuessing }}

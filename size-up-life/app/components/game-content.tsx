@@ -6,12 +6,14 @@ type GameContentProps = {
   guesses: number[];
   activeGuessIndex: number;
   animalIndices: number[];
+  maxHeight: number;
 };
 
 export default function GameContent({
   guesses,
   activeGuessIndex,
   animalIndices,
+  maxHeight,
 }: GameContentProps) {
   return (
     <main className="flex flex-row flex-1 h-full w-full items-end gap-10 overflow-x-scroll pb-3 pl-23 md:pl-25 px-3.5 mt-10">
@@ -29,7 +31,7 @@ export default function GameContent({
           key={allAnimals[animalIndex].animalName}
           imagePath={allAnimals[animalIndex].imagePath}
           imageAltText={allAnimals[animalIndex].animalName}
-          sketchHeightPx={guesses[currIndex] * 500}
+          sketchHeightPx={guesses[currIndex] * maxHeight}
           sketchAspectRatio={allAnimals[animalIndex].imageAspectRatio}
           animalName={allAnimals[animalIndex].animalName}
           isGuessing={activeGuessIndex === currIndex}

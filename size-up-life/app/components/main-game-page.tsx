@@ -2,22 +2,29 @@
 
 import { useEffect, useState } from "react";
 import seedrandom from "seedrandom";
-import { allAnimals } from "../lib/all-animals";
+import { type AnimalMetadata, allAnimals, Dimension } from "../lib/all-animals";
 import GameContent from "./game-content";
 import Navbar from "./navbar";
 import SizerSlider from "./sizer-slider";
+import GameFinishState from "./utils/game-finish-state";
 import GameMode from "./utils/game-mode";
+import getWidth from "./utils/get-width";
 
 export default function MainGamePage() {
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.DAILY);
   const [guesses, setGuesses] = useState<number[]>([0.5]);
   const [activeGuessIndex, setActiveGuessIndex] = useState<number>(0);
   const [animalIndices, setAnimalIndices] = useState<number[]>([]);
-  const [isGameFinished, setIsGameFinished] = useState<boolean>(false);
+  const [gameFinishState, setGameFinishState] = useState<GameFinishState>(
+    GameFinishState.IN_PROGRESS,
+  );
+  // TODO set this based on viewport size
+  const maxHeight: number = 500;
+  const guessTolerance: number = 10;
 
   const dailyAnimalsLimit: number = 5;
 
-  // add an animal on mount to the animalIndices array
+  // add an animal on mount to the animalIndices array (do this only once)
   useEffect(() => {
     console.log("use effect");
     selectNextAnimal(GameMode.DAILY, []);
@@ -54,11 +61,59 @@ export default function MainGamePage() {
   }
 
   function selectNextAnimal(gameMode: GameMode, animalIndices: number[]): void {
+    // checking if you can advance to the next state (i.e. checking our guess is correct)
+    // if blank animalIndices don't do this check
+    if (animalIndices.length !== 0) {
+      const currAnimal: AnimalMetadata =
+        allAnimals[animalIndices[activeGuessIndex]];
+      const currAnimalHeightPx: number =
+        guesses[activeGuessIndex] * maxHeight;
+      // we need to calculate based on which dimension we're checking
+      if (currAnimal.measuredDimension === Dimension.HEIGHT) {
+        if (
+          !(
+            currAnimal.correctDimensionMeasurement >=
+              currAnimalHeightPx - guessTolerance &&
+            currAnimal.correctDimensionMeasurement <=
+              currAnimalHeightPx + guessTolerance
+          )
+        ) {
+          // if we aren't in the correct guess interval (with tolerance)
+          // return immediately and we've lost
+          setGameFinishState(GameFinishState.LOST);
+          return;
+        }
+      } else {
+        // currAnimal.measuredDimension === Dimension.WIDTH
+        const currAnimalWidth: number = getWidth(
+          currAnimal.imageAspectRatio,
+          currAnimalHeightPx,
+        );
+        if (
+          !(
+            currAnimal.correctDimensionMeasurement >=
+              currAnimalWidth - guessTolerance &&
+            currAnimal.correctDimensionMeasurement <=
+              currAnimalWidth + guessTolerance
+          )
+        ) {
+          // if we aren't in the correct guess interval (with tolerance)
+          // return immediately and we've lost
+          setGameFinishState(GameFinishState.LOST);
+          return;
+        }
+      }
+    }
+
     if (gameMode === GameMode.DAILY) {
       // daily mode -- pick random that we haven't picked before
+
+      // you've done the daily amount of animals you need to do
+      // so you win
       if (animalIndices.length >= dailyAnimalsLimit) {
         // you won!
-        setIsGameFinished(true);
+        setGameFinishState(GameFinishState.WON);
+        return;
       }
 
       // get random seed based on day/month/year
@@ -94,12 +149,13 @@ export default function MainGamePage() {
 
       console.log("infinite", nextAnimalIndex);
 
+      // you've gone through all the animals available
       if (nextAnimalIndex > allAnimals.length - 1) {
         // // just wrap around if we're over
         // nextAnimalIndex = 0;
 
         // you won!
-        setIsGameFinished(true);
+        setGameFinishState(GameFinishState.WON);
         return;
       }
 
@@ -141,6 +197,7 @@ export default function MainGamePage() {
         guesses={guesses}
         activeGuessIndex={activeGuessIndex}
         animalIndices={animalIndices}
+        maxHeight={maxHeight}
       />
     </>
   );
