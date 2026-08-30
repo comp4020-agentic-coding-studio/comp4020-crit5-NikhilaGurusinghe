@@ -40,9 +40,7 @@ export default function GameContent({
     >
       <div className="flex flex-1 flex-row h-fit items-end gap-10 px-3.5 pb-3 pl-23 md:pl-25">
         <AnimalGraphic
-          scrollTargetRef={
-            activeGuessIndex !== 0 ? undefined : scrollTargetRef
-          }
+          scrollTargetRef={activeGuessIndex !== 0 ? undefined : scrollTargetRef}
           imagePath={`${basePath}/images/person.png`}
           imageAltText="A person"
           sketchHeightPx={1.85 * heightMtoPxModifier}
@@ -52,23 +50,25 @@ export default function GameContent({
           sketchMToPxHeightModifier={heightMtoPxModifier}
         />
 
-        {animalIndices.map((animalIndex: number, currIndex: number) => 
-          (
-            <AnimalGraphic
-              scrollTargetRef={animalIndices.length !== 0 && currIndex === animalIndices.length - 1 && activeGuessIndex === 0 ? undefined : scrollTargetRef}
-              key={allAnimals[animalIndex].animalName}
-              imagePath={allAnimals[animalIndex].imagePath}
-              imageAltText={allAnimals[animalIndex].animalName}
-              sketchHeightPx={guesses[currIndex] * maxHeight}
-              sketchAspectRatio={allAnimals[animalIndex].imageAspectRatio}
-              animalName={allAnimals[animalIndex].animalName}
-              isGuessing={activeGuessIndex === currIndex}
-              sketchMToPxHeightModifier={heightMtoPxModifier}
-            />
-          );
-        )}
-
-        
+        {animalIndices.map((animalIndex: number, currIndex: number) => (
+          <AnimalGraphic
+            scrollTargetRef={
+              animalIndices.length !== 0 &&
+              currIndex === animalIndices.length - 1 &&
+              activeGuessIndex === 0
+                ? undefined
+                : scrollTargetRef
+            }
+            key={allAnimals[animalIndex].animalName}
+            imagePath={allAnimals[animalIndex].imagePath}
+            imageAltText={allAnimals[animalIndex].animalName}
+            sketchHeightPx={guesses[currIndex] * maxHeight}
+            sketchAspectRatio={allAnimals[animalIndex].imageAspectRatio}
+            animalName={allAnimals[animalIndex].animalName}
+            isGuessing={activeGuessIndex === currIndex}
+            sketchMToPxHeightModifier={heightMtoPxModifier}
+          />
+        ))}
       </div>
     </div>
   );
