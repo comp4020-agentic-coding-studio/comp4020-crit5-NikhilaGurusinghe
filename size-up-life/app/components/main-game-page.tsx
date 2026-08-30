@@ -257,8 +257,10 @@ export default function MainGamePage() {
     // clear our animal Indices fully
     setAnimalIndices([]);
     setActiveGuessIndex(0);
+    setGuesses([newGuessValue]);
+    setLargestAnimalHeightIndex(undefined);
 
-    selectNextAnimal(gameMode, animalIndices, 0);
+    selectNextAnimal(gameMode, [], 0);
   }
 
   // TODO go into GameContent and have something that fires when activeGuessIndex changes
