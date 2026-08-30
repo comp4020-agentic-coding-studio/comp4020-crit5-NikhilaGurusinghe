@@ -26,7 +26,7 @@ export default function WinLossDialogue({
 }: WinLossDialogueProps) {
   return (
     <>
-      <div aria-hidden={isVisible} className={`${isVisible ? "opacity-100 pointer-events-auto": "opacity-0 pointer-events-none" } absolute transition-all inset-0 h-full w-full backdrop-blur-xs z-68 flex flex-col items-center justify-center`}>
+      <div aria-hidden={!isVisible} className={`${isVisible ? "opacity-100 pointer-events-auto": "opacity-0 pointer-events-none" } absolute transition-all inset-0 h-full w-full backdrop-blur-xs z-68 flex flex-col items-center justify-center`}>
         {isWin && <ReactConfettiDynamic />}
         <div
           className={`flex flex-col w-7/8 sm:w-6/8 md:w-1/2 h-full my-5 ${isWin ? "bg-yellow-300 text-black" : "bg-red-500 text-gray-100"} rounded-[60px] z-70 p-10 overflow-y-auto`}

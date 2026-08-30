@@ -256,7 +256,7 @@ export default function MainGamePage() {
 
   return (
     <>
-      <header aria-disabled={gameState !== GameState.IN_PROGRESS}>
+      <header inert={gameState !== GameState.IN_PROGRESS} aria-disabled={gameState !== GameState.IN_PROGRESS}>
         <Navbar
           activeGuessIndex={activeGuessIndex}
           gameMode={gameMode}
@@ -272,6 +272,7 @@ export default function MainGamePage() {
       <main className="h-full flex flex-col overflow-hidden">
         <WinLossDialogue gameMode={gameMode} isWin={gameState === GameState.WON} isVisible={gameState !== GameState.IN_PROGRESS} streak={activeGuessIndex} setGameState={setGameState}/>
         <GameContent
+          isAriaHidden={gameState !== GameState.IN_PROGRESS}
           guesses={guesses}
           activeGuessIndex={activeGuessIndex}
           animalIndices={animalIndices}
