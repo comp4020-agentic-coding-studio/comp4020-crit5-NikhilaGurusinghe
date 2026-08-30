@@ -24,7 +24,7 @@ export default function WinLossDialogue({
   streak,
   isVisible,
   setGameState,
-  resetGameMode
+  resetGameMode,
 }: WinLossDialogueProps) {
   return (
     <>

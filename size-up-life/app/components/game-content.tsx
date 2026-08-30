@@ -26,7 +26,7 @@ export default function GameContent({
       setTimeout(() => {
         divElement.scrollIntoView({
           behavior: "smooth",
-          block: "start",
+          block: "end",
         });
       }, 500);
     }
@@ -52,10 +52,10 @@ export default function GameContent({
           sketchMToPxHeightModifier={heightMtoPxModifier}
         />
 
-        {animalIndices.map((animalIndex: number, currIndex: number) => {
-          if (currIndex === animalIndices.length - 1) return null;
-          return (
+        {animalIndices.map((animalIndex: number, currIndex: number) => 
+          (
             <AnimalGraphic
+              scrollTargetRef={animalIndices.length !== 0 && currIndex === animalIndices.length - 1 && activeGuessIndex === 0 ? undefined : scrollTargetRef}
               key={allAnimals[animalIndex].animalName}
               imagePath={allAnimals[animalIndex].imagePath}
               imageAltText={allAnimals[animalIndex].animalName}
@@ -66,33 +66,9 @@ export default function GameContent({
               sketchMToPxHeightModifier={heightMtoPxModifier}
             />
           );
-        })}
-
-        {/* last animal */}
-        {animalIndices.length !== 0 && (
-          <AnimalGraphic
-            scrollTargetRef={
-              activeGuessIndex === 0 ? undefined : scrollTargetRef
-            }
-            key={allAnimals[animalIndices[animalIndices.length - 1]].animalName}
-            imagePath={
-              allAnimals[animalIndices[animalIndices.length - 1]].imagePath
-            }
-            imageAltText={
-              allAnimals[animalIndices[animalIndices.length - 1]].animalName
-            }
-            sketchHeightPx={guesses[animalIndices.length - 1] * maxHeight}
-            sketchAspectRatio={
-              allAnimals[animalIndices[animalIndices.length - 1]]
-                .imageAspectRatio
-            }
-            animalName={
-              allAnimals[animalIndices[animalIndices.length - 1]].animalName
-            }
-            isGuessing={activeGuessIndex === animalIndices.length - 1}
-            sketchMToPxHeightModifier={heightMtoPxModifier}
-          />
         )}
+
+        
       </div>
     </div>
   );
