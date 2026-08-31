@@ -62,10 +62,15 @@ export default function MainGamePage() {
     // TODO not using fresh values for gameMode, animalIndices passed in as arguments
     // into this method might be bad
 
-    const nextAnimalResult: GameState = selectNextAnimal(gameMode, animalIndices, activeGuessIndex);
+    const nextAnimalResult: GameState = selectNextAnimal(
+      gameMode,
+      animalIndices,
+      activeGuessIndex,
+    );
 
     if (
-      nextAnimalResult === GameState.IN_PROGRESS || nextAnimalResult === GameState.WON
+      nextAnimalResult === GameState.IN_PROGRESS ||
+      nextAnimalResult === GameState.WON
     ) {
       setActiveGuessIndex(newActiveGuessIndex);
       setGuessesAtIndex(newActiveGuessIndex, newGuessValue);

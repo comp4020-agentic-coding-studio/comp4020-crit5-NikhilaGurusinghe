@@ -23,7 +23,8 @@ export default function Navbar({
     <nav className="fixed z-67 top-0 w-full flex flex-row items-center justify-between px-7 pt-9 md:px-9 md:pt-10">
       <h1 className="sr-only">{gameMode} Mode</h1>
       <span className="text-6xl font-bold">
-        {activeGuessIndex}{gameMode === GameMode.DAILY && `/${maxDailyStreak}`}
+        {activeGuessIndex}
+        {gameMode === GameMode.DAILY && `/${maxDailyStreak}`}
         <span className="text-xl ml-[5.5px] md:ml-1.5">
           in a row ⋅ {gameMode.toLowerCase()} mode
         </span>
