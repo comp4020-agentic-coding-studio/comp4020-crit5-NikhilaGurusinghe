@@ -15,13 +15,6 @@ export type AnimalMetadata = {
 
 export const allAnimals: AnimalMetadata[] = [
   {
-    imagePath: `${basePath}/images/blue-whale.png`,
-    imageAspectRatio: "1252 / 236",
-    animalName: "Blue Whale",
-    measuredDimension: Dimension.WIDTH,
-    correctDimensionMeasurement: 27,
-  },
-  {
     imagePath: `${basePath}/images/t-rex.png`,
     imageAspectRatio: "2546 / 939",
     animalName: "Tyrannosaurus rex",
@@ -62,6 +55,13 @@ export const allAnimals: AnimalMetadata[] = [
     animalName: "Lion",
     measuredDimension: Dimension.WIDTH,
     correctDimensionMeasurement: 1.9,
+  },
+  {
+    imagePath: `${basePath}/images/blue-whale.png`,
+    imageAspectRatio: "1252 / 236",
+    animalName: "Blue Whale",
+    measuredDimension: Dimension.WIDTH,
+    correctDimensionMeasurement: 27,
   },
   {
     imagePath: `${basePath}/images/dreadnoughtus.png`,
