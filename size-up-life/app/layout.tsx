@@ -1,16 +1,42 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import localFont from "next/font/local";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const diatype = localFont({
+  src: [
+    {
+      path: "../public/fonts/Diatype/ABC Diatype/ABCDiatypeTrial-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Diatype/ABC Diatype/ABCDiatypeTrial-RegularItalic.otf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/Diatype/ABC Diatype/ABCDiatypeTrial-Medium.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Diatype/ABC Diatype/ABCDiatypeTrial-MediumItalic.otf",
+      weight: "600",
+      style: "italic",
+    },
+    {
+      path: "../public/fonts/Diatype/ABC Diatype/ABCDiatypeTrial-Bold.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Diatype/ABC Diatype/ABCDiatypeTrial-BoldItalic.otf",
+      weight: "700",
+      style: "italic",
+    },
+  ],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Size Up Life",
@@ -22,9 +48,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${diatype.className} h-full antialiased`}
     >
-      <body className="h-full flex flex-col overflow-hidden">{children}</body>
+      <body className="h-full flex flex-col overflow-hidden font-sans">{children}</body>
     </html>
   );
 }
